@@ -8,21 +8,22 @@
     tools:context=".MainActivity"
     android:background="@color/background_forms"
     android:orientation="vertical"
+
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="4dp">
+        >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:paddingStart="@dimen/header_padding_start"
-            android:paddingEnd="@dimen/header_padding_end"
+            android:paddingStart="@dimen/header_padding"
+            android:paddingEnd="@dimen/header_padding"
             android:paddingBottom="@dimen/setting_padding_bottom"
-            android:paddingTop="@dimen/header_padding_top"
+            android:paddingTop="@dimen/header_padding"
             android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="@dimen/menu_text_size"
@@ -31,18 +32,14 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
-
         <Button
-            android:id="@+id/button_search"
+           android:id="@+id/button_search"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_marginLeft="@dimen/setting_padding_start"
+            android:layout_marginRight="@dimen/setting_padding_start"
             android:foreground="?attr/selectableItemBackground"
             android:backgroundTint="@color/white"
             android:text="@string/search"
@@ -53,7 +50,8 @@
             app:icon="@drawable/ic_search"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/menu_icon_padding"
-            app:iconTint="@color/yp_black" />
+            app:iconTint="@color/yp_black"
+            />
 
         <Button
             android:id="@+id/button_media"
@@ -61,6 +59,8 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_marginLeft="@dimen/setting_padding_start"
+            android:layout_marginRight="@dimen/setting_padding_start"
             android:foreground="?attr/selectableItemBackground"
             android:backgroundTint="@color/white"
             android:text="@string/media"
@@ -71,7 +71,8 @@
             app:icon="@drawable/ic_media"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/menu_icon_padding"
-            app:iconTint="@color/yp_black" />
+            app:iconTint="@color/yp_black"
+            />
 
         <Button
             android:id="@+id/button_setting"
@@ -79,6 +80,8 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_marginLeft="@dimen/setting_padding_start"
+            android:layout_marginRight="@dimen/setting_padding_start"
             android:foreground="?attr/selectableItemBackground"
             android:backgroundTint="@color/white"
             android:text="@string/setting"
@@ -88,10 +91,7 @@
             app:cornerRadius="@dimen/btn_corner_radius"
             app:icon="@drawable/ic_setting"
             app:iconGravity="textStart"
-            app:iconPadding="@dimen/menu_icon_padding"
+            app:iconPadding=    "@dimen/menu_icon_padding"
             app:iconTint="@color/yp_black" />
-
-</LinearLayout>
-
 
 </LinearLayout>
