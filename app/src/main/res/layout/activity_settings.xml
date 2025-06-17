@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".SettingsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:layout_marginBottom="24dp"
+        >
+
+        <Button
+            android:id="@+id/button_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/white"
+            android:foreground="?attr/selectableItemBackground"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/yp_black" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/header_padding_start"
+            android:paddingEnd="@dimen/header_padding_end"
+            android:paddingBottom="@dimen/header_padding_bottom"
+            android:paddingTop="@dimen/header_padding_top"
+            android:text="@string/setting"
+            android:textColor="@color/yp_black"
+            android:textSize="@dimen/menu_text_size"
+            />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/setting_padding_start"
+        android:paddingEnd="@dimen/setting_padding_end"
+        android:paddingBottom="@dimen/setting_padding_bottom"
+        android:paddingTop="@dimen/setting_padding_top"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/dark_themes"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text_size_16"
+        android:textAllCaps="false"
+        app:switchMinWidth="35dp"
+    />
+
+   <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:paddingStart="@dimen/setting_padding_start"
+        android:paddingEnd="@dimen/setting_padding_end"
+        android:paddingBottom="@dimen/setting_padding_bottom"
+        android:paddingTop="@dimen/setting_padding_top"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/share_application"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text_size_16"
+        android:textAllCaps="false"
+        android:textAlignment="textStart"
+        app:icon="@drawable/ic_share"
+        app:iconTint="@color/light_grey"
+        app:iconGravity="end"
+        app:iconPadding="@dimen/menu_icon_padding"
+
+       />
+
+   <Button
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:backgroundTint="@color/white"
+       android:paddingStart="@dimen/setting_padding_start"
+       android:paddingEnd="@dimen/setting_padding_end"
+       android:paddingBottom="@dimen/setting_padding_bottom"
+       android:paddingTop="@dimen/setting_padding_top"
+       android:foreground="?attr/selectableItemBackground"
+       android:text="@string/write_support"
+       android:textColor="@color/black"
+       android:textSize="@dimen/menu_text_size_16"
+       android:textAllCaps="false"
+       android:textAlignment="textStart"
+       app:icon="@drawable/ic_support"
+       app:iconTint="@color/light_grey"
+       app:iconGravity="end"
+       app:iconPadding="@dimen/menu_icon_padding"/>
+
+   <Button
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:backgroundTint="@color/white"
+       android:paddingStart="@dimen/setting_padding_start"
+       android:paddingEnd="@dimen/setting_padding_end"
+       android:paddingBottom="@dimen/setting_padding_bottom"
+       android:paddingTop="@dimen/setting_padding_top"
+       android:foreground="?attr/selectableItemBackground"
+       android:text="@string/user_agreement"
+       android:textColor="@color/black"
+       android:textSize="@dimen/menu_text_size_16"
+       android:textAllCaps="false"
+       android:textAlignment="textStart"
+       app:icon="@drawable/ic_arrow_forward"
+       app:iconTint="@color/light_grey"
+       app:iconGravity="end"
+       app:iconPadding="@dimen/menu_icon_padding"/>
+
+</LinearLayout>
