@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="switchStyleLight" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="thumbTint">@color/white</item>
+        <item name="trackTint">@color/white</item>
+    </style>
+
+    <style name="switchStyleDark" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="thumbTint">@color/yp_black</item>
+        <item name="trackTint">@color/yp_black</item>
+    </style>
+</resources>
