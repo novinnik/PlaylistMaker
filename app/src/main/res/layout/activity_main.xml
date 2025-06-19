@@ -10,7 +10,17 @@
     android:orientation="vertical"
 
     >
-    <LinearLayout
+   <com.google.android.material.appbar.MaterialToolbar
+       android:id="@+id/toolbar_activity_main"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/toolbar_height"
+       android:layout_gravity="center_vertical"
+       app:title="@string/app_name"
+       app:titleTextColor="@color/white"
+       app:titleTextAppearance="@style/activity_maim_header"
+       />
+
+<!--    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -30,7 +40,7 @@
             android:textStyle="bold">
         </TextView>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
         <Button
            android:id="@+id/button_search"
