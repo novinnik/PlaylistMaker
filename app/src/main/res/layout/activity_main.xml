@@ -1,19 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/background_forms"
+    android:orientation="vertical"
 
-    <TextView
-        android:layout_width="wrap_content"
+    >
+   <com.google.android.material.appbar.MaterialToolbar
+       android:id="@+id/toolbar_activity_main"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/toolbar_height"
+       android:layout_gravity="center_vertical"
+       app:title="@string/app_name"
+       app:titleTextColor="@color/white"
+       app:titleTextAppearance="@style/activity_maim_header"
+       />
+
+<!--    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="@dimen/header_padding"
+            android:paddingEnd="@dimen/header_padding"
+            android:paddingBottom="@dimen/setting_padding_bottom"
+            android:paddingTop="@dimen/header_padding"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/menu_text_size"
+            android:textStyle="bold">
+        </TextView>
+
+    </LinearLayout>-->
+
+        <Button
+           android:id="@+id/button_search"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/setting_padding_start"
+            android:layout_marginRight="@dimen/setting_padding_start"
+            android:foreground="?attr/selectableItemBackground"
+            android:backgroundTint="@color/white"
+            android:text="@string/search"
+            android:textAllCaps="false"
+            android:textColor="@color/yp_black"
+            android:textSize="@dimen/menu_text_size"
+            app:cornerRadius="@dimen/btn_corner_radius"
+            app:icon="@drawable/ic_search"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/menu_icon_padding"
+            app:iconTint="@color/yp_black"
+            />
+
+        <Button
+            android:id="@+id/button_media"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/setting_padding_start"
+            android:layout_marginRight="@dimen/setting_padding_start"
+            android:foreground="?attr/selectableItemBackground"
+            android:backgroundTint="@color/white"
+            android:text="@string/media"
+            android:textAllCaps="false"
+            android:textColor="@color/yp_black"
+            android:textSize="@dimen/menu_text_size"
+            app:cornerRadius="@dimen/btn_corner_radius"
+            app:icon="@drawable/ic_media"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/menu_icon_padding"
+            app:iconTint="@color/yp_black"
+            />
+
+        <Button
+            android:id="@+id/button_setting"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/setting_padding_start"
+            android:layout_marginRight="@dimen/setting_padding_start"
+            android:foreground="?attr/selectableItemBackground"
+            android:backgroundTint="@color/white"
+            android:text="@string/setting"
+            android:textAllCaps="false"
+            android:textColor="@color/yp_black"
+            android:textSize="@dimen/menu_text_size"
+            app:cornerRadius="@dimen/btn_corner_radius"
+            app:icon="@drawable/ic_setting"
+            app:iconGravity="textStart"
+            app:iconPadding=    "@dimen/menu_icon_padding"
+            app:iconTint="@color/yp_black" />
+
+</LinearLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="menu_icon_padding">8dp</dimen>
+    <dimen name="btn_corner_radius">16dp</dimen>
+    <dimen name="header_padding">12dp</dimen>
+    <dimen name="menu_text_size">22sp</dimen>
+    <dimen name="menu_text_size_16">16sp</dimen>
+    <dimen name="setting_padding_start">16dp</dimen>
+    <dimen name="setting_padding_end">16dp</dimen>
+    <dimen name="setting_padding_top">20dp</dimen>
+    <dimen name="setting_padding_bottom">20dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+</resources>
