@@ -3,11 +3,7 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
@@ -28,13 +24,13 @@ class MainActivity : AppCompatActivity() {
 
         searсhButton.setOnClickListener(buttonSeaкchClickListener)
 
-        mediaButton.setOnClickListener{
+        mediaButton.setOnClickListener {
             val mediaIntent = Intent(this@MainActivity, MediaActivity::class.java)
             startActivity(mediaIntent)
         }
 
-        settingButton.setOnClickListener{
-            val settingIntent= Intent(this@MainActivity, SettingsActivity::class.java)
+        settingButton.setOnClickListener {
+            val settingIntent = Intent(this@MainActivity, SettingsActivity::class.java)
             startActivity(settingIntent)
         }
     }

@@ -3,12 +3,7 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toolbar
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 
@@ -18,10 +13,10 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val backButtonToolbar = findViewById<MaterialToolbar>(R.id.toolbar_activity_setting)
-        backButtonToolbar.setNavigationOnClickListener{finish()}
+        backButtonToolbar.setNavigationOnClickListener { finish() }
 
         val shareApplication = findViewById<MaterialButton>(R.id.setting_share_application)
-        shareApplication.setOnClickListener{
+        shareApplication.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.setType("plain/text")
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.uri_android_developer))
@@ -29,17 +24,17 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val writeSupportButton = findViewById<MaterialButton>(R.id.setting_write_support)
-        writeSupportButton.setOnClickListener{
+        writeSupportButton.setOnClickListener {
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = Uri.parse("mailto:")
             supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("novinnik@yandex.ru"))
-            supportIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.theme_support)
-            supportIntent.putExtra(Intent.EXTRA_TEXT, R.string.message_support)
+            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.theme_support))
+            supportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.message_support))
             startActivity(supportIntent)
         }
 
         val userAgreementButton = findViewById<MaterialButton>(R.id.setting_user_agreement)
-        userAgreementButton.setOnClickListener{
+        userAgreementButton.setOnClickListener {
             val agreementIntent = Intent(Intent.ACTION_VIEW)
             agreementIntent.data = Uri.parse(getString(R.string.uri_yandex_practicum))
             startActivity(agreementIntent)

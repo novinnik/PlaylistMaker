@@ -60,7 +60,7 @@
         <item name="iconTint">@color/yp_black</item>
     </style>
 
-    <style name="button_activity_setting">
+    <style name="button_activity_setting" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingStart">@dimen/padding_16</item>
@@ -76,7 +76,7 @@
         <item name="android:textAlignment">textStart</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
-        <item name="iconTint">@color/light_grey</item>
+        <item name="iconTint">@color/grey</item>
         <item name="iconGravity">end</item>
         <item name="iconPadding">@dimen/menu_icon_padding</item>
     </style>
@@ -120,7 +120,7 @@
         <item name="android:gravity">center_vertical</item>
 
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textColor">@color/grey</item>
+        <item name="android:textColor">@color/yp_black</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">@dimen/padding_16</item>
     </style>
