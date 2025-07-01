@@ -2,103 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/white"
+    android:id="@+id/activity_setting"
+    style="@style/ActivityHeaderStyle"
     tools:context=".SettingsActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_activity_setting"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:layout_gravity="center_vertical"
-        android:padding="4dp"
-        android:layout_marginBottom="24dp"
-        app:navigationIcon="@drawable/ic_arrow_back"
+        style="@style/activity_header_button"
         app:title="@string/setting"
-        app:titleTextAppearance="@style/activity_setting_header"
         />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/theme_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/setting_padding_start"
-        android:paddingEnd="@dimen/setting_padding_end"
-        android:paddingBottom="@dimen/setting_padding_bottom"
-        android:paddingTop="@dimen/setting_padding_top"
-        android:outlineSpotShadowColor="@color/white"
         android:text="@string/dark_themes"
-        android:textColor="@color/black"
-        android:textSize="@dimen/menu_text_size_16"
-        android:textAllCaps="false"
-        app:switchMinWidth="35dp"
-        app:useMaterialThemeColors="false"
-        app:thumbTint="@color/switch_thumb_color"
-        app:trackTint="@color/switch_track_color"
-    />
+        style="@style/button_activity_swith"/>
 
-   <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:paddingStart="@dimen/setting_padding_start"
-        android:paddingEnd="@dimen/setting_padding_end"
-        android:paddingBottom="@dimen/setting_padding_bottom"
-        android:paddingTop="@dimen/setting_padding_top"
-        android:foreground="?attr/selectableItemBackground"
-        android:outlineSpotShadowColor="@color/white"
-        android:text="@string/share_application"
-        android:textColor="@color/black"
-        android:textSize="@dimen/menu_text_size_16"
-        android:textAllCaps="false"
-        android:textAlignment="textStart"
-        app:icon="@drawable/ic_share"
-        app:iconTint="@color/light_grey"
-        app:iconGravity="end"
-        app:iconPadding="@dimen/menu_icon_padding"
+   <com.google.android.material.button.MaterialButton
+       android:id="@+id/setting_share_application"
+       android:text="@string/share_application"
+       app:icon="@drawable/ic_share"
+       style="@style/button_activity_setting"/>
 
-       />
-
-   <Button
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:backgroundTint="@color/white"
-       android:paddingStart="@dimen/setting_padding_start"
-       android:paddingEnd="@dimen/setting_padding_end"
-       android:paddingBottom="@dimen/setting_padding_bottom"
-       android:paddingTop="@dimen/setting_padding_top"
-       android:foreground="?attr/selectableItemBackground"
-       android:outlineSpotShadowColor="@color/white"
+   <com.google.android.material.button.MaterialButton
+       android:id="@+id/setting_write_support"
        android:text="@string/write_support"
-       android:textColor="@color/black"
-       android:textSize="@dimen/menu_text_size_16"
-       android:textAllCaps="false"
-       android:textAlignment="textStart"
        app:icon="@drawable/ic_support"
-       app:iconTint="@color/light_grey"
-       app:iconGravity="end"
-       app:iconPadding="@dimen/menu_icon_padding"/>
+       style="@style/button_activity_setting"/>
 
-   <Button
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:backgroundTint="@color/white"
-       android:paddingStart="@dimen/setting_padding_start"
-       android:paddingEnd="@dimen/setting_padding_end"
-       android:paddingBottom="@dimen/setting_padding_bottom"
-       android:paddingTop="@dimen/setting_padding_top"
-       android:foreground="?attr/selectableItemBackground"
-       android:outlineSpotShadowColor="@color/white"
+   <com.google.android.material.button.MaterialButton
+       android:id="@+id/setting_user_agreement"
        android:text="@string/user_agreement"
-       android:textColor="@color/black"
-       android:textSize="@dimen/menu_text_size_16"
-       android:textAllCaps="false"
-       android:textAlignment="textStart"
        app:icon="@drawable/ic_arrow_forward"
-       app:iconTint="@color/light_grey"
-       app:iconGravity="end"
-       app:iconPadding="@dimen/menu_icon_padding"/>
+       style="@style/button_activity_setting"/>
 
 </LinearLayout>

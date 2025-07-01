@@ -5,9 +5,16 @@
     <dimen name="header_padding">12dp</dimen>
     <dimen name="menu_text_size">22sp</dimen>
     <dimen name="menu_text_size_16">16sp</dimen>
-    <dimen name="setting_padding_start">16dp</dimen>
-    <dimen name="setting_padding_end">16dp</dimen>
-    <dimen name="setting_padding_top">20dp</dimen>
-    <dimen name="setting_padding_bottom">20dp</dimen>
+<!--    <dimen name="setting_padding_start">16dp</dimen>-->
+<!--    <dimen name="setting_padding_end">16dp</dimen>-->
+<!--    <dimen name="setting_padding_top">20dp</dimen>-->
+<!--    <dimen name="setting_padding_bottom">20dp</dimen>-->
     <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="rounded_search">8dp</dimen>
+
+    <dimen name="padding_12">12dp</dimen>
+    <dimen name="padding_16">16dp</dimen>
+    <dimen name="padding_20">20dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
+    <dimen name="padding_36">36dp</dimen>
 </resources>

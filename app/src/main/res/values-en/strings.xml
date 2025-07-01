@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Playlist Maker</string>
+    <string name="search">Search</string>
+    <string name="media">Media</string>
+    <string name="setting">Settings</string>
+    <string name="dark_themes">Dark theme</string>
+    <string name="share_application">Share the application</string>
+    <string name="write_support">Wtite to technical support</string>
+    <string name="user_agreement">User agreement</string>
+    <string name="theme_support">Message to developers and developers of the Playlist Maker application</string>
+    <string name="message_support">Thanks to the developers and developers for the cool application!</string>
+    <string name="clear_string_search">" Clear the search query"</string>
+</resources>
