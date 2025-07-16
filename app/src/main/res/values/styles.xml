@@ -12,7 +12,7 @@
 
     <style name="ActivityHeaderStyle">
         <item name="android:layout_width">match_parent</item>
-         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:background">@color/white</item>
     </style>
@@ -21,7 +21,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/toolbar_height</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginBottom">@dimen/padding_24</item>
+       <!-- <item name="android:layout_marginBottom">@dimen/padding_8</item>-->
         <item name="titleTextAppearance">@style/top_text</item>
         <item name="navigationIcon">@drawable/ic_arrow_back</item>
     </style>
@@ -58,6 +58,18 @@
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/menu_icon_padding</item>
         <item name="iconTint">@color/yp_black</item>
+    </style>
+
+    <style name="bt_menu_search" parent="button_activity_main">
+        <item name="icon">@drawable/ic_search</item>
+    </style>
+
+    <style name="bt_menu_media" parent="button_activity_main">
+        <item name="icon">@drawable/ic_media</item>
+    </style>
+
+    <style name="bt_menu_setting" parent="button_activity_main">
+        <item name="icon">@drawable/ic_setting</item>
     </style>
 
     <style name="button_activity_setting" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -124,7 +136,39 @@
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">@dimen/padding_16</item>
     </style>
-    
-    
+
+    <style name="track_style_name">
+        <item name="android:textSize">@dimen/track_size_name</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="track_style_name_color" parent="track_style_name">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="track_style_art_time">
+        <item name="android:textSize">@dimen/track_size_art_11</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="track_style_art_color" parent="track_style_art_time">
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <style name="track_style_button_forward">
+        <item name="android:layout_width">@dimen/padding_8</item>
+        <item name="android:layout_height">@dimen/padding_16</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginEnd">@dimen/padding_12</item>
+        <item name="android:src">@drawable/ic_arrow_forward</item>
+    </style>
+
+    <style name="track_style_button_forward_color" parent="track_style_button_forward">
+        <item name="tint">@color/grey</item>
+    </style>
     
 </resources>

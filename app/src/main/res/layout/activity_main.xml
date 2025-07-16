@@ -19,17 +19,17 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_search"
-        style="@style/button_activity_main"
+        style="@style/bt_menu_search"
         android:text="@string/search" />
 
    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_media"
         android:text="@string/media"
-        style="@style/button_activity_main"/>
+        style="@style/bt_menu_media"/>
 
    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_setting"
         android:text="@string/setting"
-        style="@style/button_activity_main"/>
+        style="@style/bt_menu_setting"/>
 
 </LinearLayout>

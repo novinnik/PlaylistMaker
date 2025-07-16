@@ -91,4 +91,16 @@
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">@dimen/padding_16</item>
     </style>
+
+    <style name="track_style_name_color" parent="track_style_name">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="track_style_art_color" parent="track_style_art_time">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="track_style_button_forward_color" parent="track_style_button_forward">
+        <item name="tint">@color/white</item>
+    </style>
 </resources>
