@@ -9,7 +9,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.practicum.playlistmaker.searchResult.Track
+import com.practicum.playlistmaker.searchResult.TrackAdapter
+import com.practicum.playlistmaker.searchResult.TrackMock
 
 class SearchActivity : AppCompatActivity() {
     private var textSearch: String = TEXT_EMPTY
@@ -45,6 +49,14 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputSearchText.addTextChangedListener(simpleTextWatcher)
+
+
+
+    val recyclerSearch = findViewById<RecyclerView>(R.id.track_search_recycler)
+    val trackAdapter = TrackAdapter(TrackMock.trackList)
+    recyclerSearch.adapter = trackAdapter
+
+
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {

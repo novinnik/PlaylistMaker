@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
@@ -14,18 +14,18 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/toolbar_height">
+        android:layout_height="52dp"
+        android:layout_marginBottom="@dimen/padding_16"
+        >
 
         <EditText
             android:id="@+id/inputSearchText"
+            style="@style/search_bar"
             android:hint="@string/search"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
-            android:singleLine="true"
-            style="@style/search_bar"
-            />
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/clearButtonSearch"
@@ -35,15 +35,17 @@
             android:layout_marginEnd="28dp"
             android:contentDescription="@string/clear_string_search"
             android:src="@drawable/ic_clear_light"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
     </FrameLayout>
 
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/track_search_recycler"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    tools:listitem="@layout/search_track_view"
+    tools:itemCount="5"/>
 
-
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

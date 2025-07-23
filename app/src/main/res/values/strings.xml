@@ -12,4 +12,5 @@
     <string name="uri_yandex_practicum" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="uri_android_developer" translatable="false">https://practicum.yandex.ru/android-developer/</string>
     <string name="clear_string_search">Очистить поисковый запрос</string>
+    <string name="track_unification" translatable="false">%1 • %2</string>
 </resources>
