@@ -7,6 +7,7 @@
 
     <dimen name="menu_icon_padding">8dp</dimen>
     <dimen name="btn_corner_radius">16dp</dimen>
+    <dimen name="btn_corner_radius_placeholder">54dp</dimen>
     <dimen name="header_padding">12dp</dimen>
 
 <!--    <dimen name="setting_padding_start">16dp</dimen>-->

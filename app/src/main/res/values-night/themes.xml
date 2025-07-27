@@ -13,5 +13,6 @@
         <item name="colorSecondary">@color/yp_black</item>
         <item name="colorSecondaryVariant">@color/yp_black</item>
         <item name="colorOnSecondary">@color/white</item>
+
     </style>
 </resources>
