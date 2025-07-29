@@ -40,10 +40,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var btnUpdatePlaceholder: Button
 
     enum class StateSearch {
-        LOADING,    //загрузка
-        ERROR,      //ошибка
-        EMPTY,      //ни чего, пусто
-        SUCCESS     //успешно
+        CLEAR,    //очистка
+        ERROR,    //ошибка
+        EMPTY,    //ни чего, пусто
+        SUCCESS   //успешно
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +63,7 @@ class SearchActivity : AppCompatActivity() {
         btnUpdatePlaceholder = findViewById(R.id.bt_placeholder_update)
 
         clearButtonSearch.setOnClickListener {
+            updateUI(StateSearch.CLEAR)
             inputSearchText.setText(TEXT_EMPTY)
             val inputMM = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMM?.hideSoftInputFromWindow(inputSearchText.windowToken, 0)
@@ -121,7 +122,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchTrack(text: String) {
-        updateUI(StateSearch.LOADING)
+        updateUI(StateSearch.CLEAR)
 
         iTunesService //сервис api
             .search(text) //вызываем метод отправляем запрос
@@ -137,19 +138,19 @@ class SearchActivity : AppCompatActivity() {
                             trackAdapter.notifyDataSetChanged()
                             updateUI(StateSearch.SUCCESS)
                         } else {
-                           // trackAdapter.notifyDataSetChanged()
+                           trackAdapter.notifyDataSetChanged()
                             updateUI(StateSearch.EMPTY)
                         }
                     } else {
-                      //  trackAdapter.notifyDataSetChanged()
+                        trackAdapter.notifyDataSetChanged()
                         updateUI(StateSearch.ERROR)
                     }
-//                    trackAdapter.notifyDataSetChanged()
+                //    trackAdapter.notifyDataSetChanged()
                 }
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
                     trackList.clear()
-                 //   trackAdapter.notifyDataSetChanged()
+                    trackAdapter.notifyDataSetChanged()
                     updateUI(StateSearch.ERROR)
                 }
 
@@ -176,7 +177,7 @@ class SearchActivity : AppCompatActivity() {
                 errorPlaceholder.visibility = View.INVISIBLE
             }
 
-            StateSearch.LOADING ->  {
+            StateSearch.CLEAR ->  {
                 recyclerSearch.visibility = View.INVISIBLE
                 noConnectionPlaceholder.visibility = View.INVISIBLE
                 errorPlaceholder.visibility = View.INVISIBLE

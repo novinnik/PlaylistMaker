@@ -49,6 +49,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:visibility="invisible"
             tools:listitem="@layout/search_track_view"
             tools:itemCount="5"/>
 
