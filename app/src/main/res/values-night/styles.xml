@@ -103,4 +103,13 @@
     <style name="track_style_button_forward_color" parent="track_style_button_forward">
         <item name="tint">@color/white</item>
     </style>
+
+    <style name="placeholder_error_text_color" parent="placeholder_error_text">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="placeholder_button_update_color" parent="placeholder_button_update">
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
 </resources>

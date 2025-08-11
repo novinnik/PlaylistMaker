@@ -16,7 +16,6 @@
 
         <!--StatusBar-->
         <!-- <item name="android:statusBarColor"></item>-->
-
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

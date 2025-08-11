@@ -11,4 +11,7 @@
     <string name="theme_support">Message to developers and developers of the Playlist Maker application</string>
     <string name="message_support">Thanks to the developers and developers for the cool application!</string>
     <string name="clear_string_search">" Clear the search query"</string>
+    <string name="no_connection">" Connection problems.     Download failed. Check your internet connection"</string>
+    <string name="nothing_was_found">Nothing was found</string>
+    <string name="refresh">Refresh</string>
 </resources>

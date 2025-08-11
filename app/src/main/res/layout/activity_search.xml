@@ -39,13 +39,62 @@
 
     </FrameLayout>
 
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/track_search_recycler"
+    <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:listitem="@layout/search_track_view"
-    tools:itemCount="5"/>
+    android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/track_search_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:visibility="invisible"
+            tools:listitem="@layout/search_track_view"
+            tools:itemCount="5"/>
+
+        <LinearLayout
+            android:id="@+id/placeholder_error"
+            style="@style/placeholder_error_layout"
+            >
+
+            <ImageView
+                style="@style/placeholder_error_image"
+                android:src="@drawable/ic_placeholder_nothing"
+               />
+
+            <TextView
+                style="@style/placeholder_error_text_color"
+                android:text="@string/nothing_was_found"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/placeholder_no_connection"
+            style="@style/placeholder_error_layout"
+            >
+
+            <ImageView
+                style="@style/placeholder_error_image"
+                android:src="@drawable/ic_placeholder_no_connection"
+                />
+
+            <TextView
+                style="@style/placeholder_error_text_color"
+                android:text="@string/no_connection"
+                />
+
+            <Button
+                android:id="@+id/bt_placeholder_update"
+                android:text="@string/refresh"
+                style="@style/placeholder_button_update_color"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
 
 </LinearLayout>
