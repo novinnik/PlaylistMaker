@@ -4,8 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.practicum.playlistmaker.App.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.App.Companion.DARK_THEME
+
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +42,16 @@ class SettingsActivity : AppCompatActivity() {
             val agreementIntent = Intent(Intent.ACTION_VIEW)
             agreementIntent.data = Uri.parse(getString(R.string.uri_yandex_practicum))
             startActivity(agreementIntent)
+        }
+
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.theme_switch)
+
+        val sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+
+        themeSwitcher.isChecked = sharedPreferences.getBoolean(DARK_THEME, false)
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
 
     }

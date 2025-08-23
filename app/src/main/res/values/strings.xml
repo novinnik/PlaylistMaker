@@ -14,6 +14,8 @@
     <string name="clear_string_search">Очистить поисковый запрос</string>
     <string name="track_unification" translatable="false">%1 • %2</string>
     <string name="no_connection">Проблемы со связью. \n \n Загрузка не удалась. Проверьте подключение к интернету</string>
-    <string name="nothing_was_found">Ни чего не нашлось</string>
+    <string name="nothing_was_found">Ничего не нашлось</string>
     <string name="refresh">Обновить</string>
+    <string name="your_history">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
 </resources>

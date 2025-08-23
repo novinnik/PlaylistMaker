@@ -112,4 +112,8 @@
         <item name="android:textColor">@color/yp_black</item>
         <item name="android:backgroundTint">@color/white</item>
     </style>
+
+    <style name="history_search_text_color" parent="history_search_text">
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>
