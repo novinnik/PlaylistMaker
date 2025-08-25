@@ -1,11 +1,14 @@
 package com.practicum.playlistmaker.searchResult
 
 import android.content.Context
+import android.os.Parcelable
 import android.util.TypedValue
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@Parcelize
 data class Track(
     @SerializedName("trackId") val id  : Int,
     val trackName : String?, //название трека
@@ -16,7 +19,7 @@ data class Track(
     val releaseDate: String?, //год релиза трека
     val primaryGenreName: String?, //жанр трека
     val country: String? //страна исполнителя
-) {
+) :Parcelable {
 
     fun getCoverArtwork() = albumPoster?.replaceAfterLast('/', "512x512bb.jpg")
 

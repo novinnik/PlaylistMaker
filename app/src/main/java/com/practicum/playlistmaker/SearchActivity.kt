@@ -273,7 +273,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun startActivityPlayer(trackClicked:Track){
         val mediaIntent = Intent(this@SearchActivity, PlayerActivity::class.java)
-        mediaIntent.putExtra(MEDIA_TRACK_KEY, Gson().toJson(trackClicked))
+        mediaIntent.putExtra(MEDIA_TRACK_KEY, trackClicked)
         startActivity(mediaIntent)
     }
 

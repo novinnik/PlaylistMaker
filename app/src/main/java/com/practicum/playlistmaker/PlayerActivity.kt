@@ -1,10 +1,12 @@
 package com.practicum.playlistmaker
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
@@ -45,6 +47,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var groupCollection : Group
     private lateinit var groupYear : Group
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,7 +57,7 @@ class PlayerActivity : AppCompatActivity() {
 
         backButtonToolbar.setNavigationOnClickListener { finish() }
 
-        currentTrack = Gson().fromJson(intent.getStringExtra(MEDIA_TRACK_KEY), Track::class.java)
+        currentTrack = intent.getParcelableExtra(MEDIA_TRACK_KEY, Track::class.java)
 
         currentTrack?.let { addMediaTrack(it) }
 
@@ -124,7 +127,7 @@ class PlayerActivity : AppCompatActivity() {
         private const val STATUS_PLAY = 2 //проигрывание
         private const val STATUS_PAUSE = 3 //пауза
 
-        const val CORNER_RADIUS = 8f
+        private const val CORNER_RADIUS = 8f
         const val MEDIA_TRACK_KEY = "media_track_key"
     }
 

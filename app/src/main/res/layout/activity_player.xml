@@ -8,7 +8,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_activity_player"
-        style="@style/activity_header_button" />
+        style="@style/activity_header_button.icon" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -92,7 +92,6 @@
             android:src="@drawable/ic_queue"
             android:contentDescription="@string/player_btn_add_description"
             app:layout_constraintStart_toStartOf="@id/left_guidelineBase"
-            app:layout_constraintEnd_toStartOf="@id/btn_play"
             app:layout_constraintTop_toTopOf="@id/btn_play"
             app:layout_constraintBottom_toBottomOf="@id/btn_play"
             app:layout_constraintHorizontal_chainStyle="spread"
@@ -115,7 +114,6 @@
             style="@style/player_btn_image"
             android:src="@drawable/ic_favorite"
             android:contentDescription="@string/player_btn_like_description"
-            app:layout_constraintStart_toEndOf="@id/btn_play"
             app:layout_constraintEnd_toStartOf="@id/right_guidelineBase"
             app:layout_constraintTop_toTopOf="@id/btn_play"
             app:layout_constraintBottom_toBottomOf="@id/btn_play"/>

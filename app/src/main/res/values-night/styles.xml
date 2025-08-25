@@ -4,19 +4,11 @@
         <item name="android:background">@color/yp_black</item>
     </style>
 
-    <style name="ActivityHeaderStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:orientation">vertical</item>
+    <style name="ActivityHeaderStyle"  parent="linear_vertical_match">
         <item name="android:background">@color/yp_black</item>
     </style>
 
-    <style name="activity_header_button">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/toolbar_height</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginBottom">@dimen/padding_24</item>
-        <item name="titleTextAppearance">@style/top_text</item>
+    <style name="activity_header_button.icon">
         <item name="navigationIcon">@drawable/ic_arrow_back_white</item>
     </style>
 

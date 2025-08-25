@@ -8,7 +8,7 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_activity_setting"
-        style="@style/activity_header_button"
+        style="@style/activity_header_button.icon"
         app:title="@string/setting"
         />
 
