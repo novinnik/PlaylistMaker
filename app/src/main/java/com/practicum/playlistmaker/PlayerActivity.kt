@@ -57,7 +57,12 @@ class PlayerActivity : AppCompatActivity() {
 
         backButtonToolbar.setNavigationOnClickListener { finish() }
 
-        currentTrack = intent.getParcelableExtra(MEDIA_TRACK_KEY, Track::class.java)
+        currentTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(MEDIA_TRACK_KEY, Track::class.java)
+        } else {
+            @Suppress("DEPRECATION") // Для старых версий SDK
+            intent.getParcelableExtra(MEDIA_TRACK_KEY)
+        }
 
         currentTrack?.let { addMediaTrack(it) }
 
