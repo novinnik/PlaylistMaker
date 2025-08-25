@@ -20,7 +20,7 @@ class SearchHistory(private val preferences: SharedPreferences) {
     fun addToHistory(newTrack : Track){
         val historyList = getHistory().toMutableList()
         //удаление элемента, если присутствует в списке
-        historyList.removeAll{it.trackId == newTrack.trackId}
+        historyList.removeAll{it.id == newTrack.id}
         //добавляем в начало
         historyList.add(0, newTrack)
         //проверяем на ограничение кол-ва

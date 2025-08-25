@@ -2,4 +2,5 @@
 <resources>
     <color name="clear_image_color_primary">@color/yp_black</color>
     <color name="placeholder_image_color_primary">@color/white</color>
+    <color name="button_media">#40FFFFFF</color>
 </resources>

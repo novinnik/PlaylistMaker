@@ -10,10 +10,19 @@
     <string name="user_agreement">User agreement</string>
     <string name="theme_support">Message to developers and developers of the Playlist Maker application</string>
     <string name="message_support">Thanks to the developers and developers for the cool application!</string>
-    <string name="clear_string_search">" Clear the search query"</string>
-    <string name="no_connection">" Connection problems.     Download failed. Check your internet connection"</string>
+    <string name="clear_string_search">"Clear the search query"</string>
+    <string name="no_connection">"Connection problems.     Download failed. Check your internet connection"</string>
     <string name="nothing_was_found">Nothing was found</string>
     <string name="refresh">Refresh</string>
     <string name="your_history">You were looking for</string>
     <string name="clear_history">Clear the history</string>
+    <string name="player_image_album_description">Album poster description</string>
+    <string name="country">Country</string>
+    <string name="genre">Genre</string>
+    <string name="year">Year</string>
+    <string name="Album">Album</string>
+    <string name="duration">Duration</string>
+    <string name="player_btn_play_description">Play/Pause</string>
+    <string name="player_btn_add_description">Add to playlist</string>
+    <string name="player_btn_like_description">Add to favorite</string>
 </resources>
