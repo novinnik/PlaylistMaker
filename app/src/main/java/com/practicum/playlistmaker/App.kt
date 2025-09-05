@@ -41,7 +41,7 @@ class App:Application() {
     }
 
     companion object{
-        const val PLAYLIST_MAKER_PREFERENCES =" PLAYLIST_MAKER_PREFERENCES"
-        const val DARK_THEME =" DARK_THEME"
+        const val PLAYLIST_MAKER_PREFERENCES = "PLAYLIST_MAKER_PREFERENCES"
+        const val DARK_THEME = "DARK_THEME"
     }
 }

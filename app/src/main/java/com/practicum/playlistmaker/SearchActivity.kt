@@ -2,6 +2,7 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -16,6 +17,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.gson.Gson
 import com.practicum.playlistmaker.searchResult.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -118,6 +120,7 @@ class SearchActivity : AppCompatActivity() {
         trackAdapter = TrackAdapter(trackList){track ->
             historySearch.addToHistory(track)
             updateHistorySearch()
+            startActivityPlayer(track)
         }
 
         recyclerSearch.adapter = trackAdapter
@@ -149,6 +152,7 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = TrackAdapter(historyList){track ->
             historySearch.addToHistory(track)
             updateHistorySearch()
+            startActivityPlayer(track)
         }
 
         historyRecyclerView.adapter = historyAdapter
@@ -267,9 +271,16 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun startActivityPlayer(trackClicked:Track){
+        val mediaIntent = Intent(this@SearchActivity, PlayerActivity::class.java)
+        mediaIntent.putExtra(MEDIA_TRACK_KEY, trackClicked)
+        startActivity(mediaIntent)
+    }
+
     companion object {
         const val TEXT_EMPTY = ""
         const val SEARCH_STRING = "SEARCH_STRING"
         const val SEARCH_HISTORY_PREF = "search_history_pref"
+        const val MEDIA_TRACK_KEY = "media_track_key"
     }
 }

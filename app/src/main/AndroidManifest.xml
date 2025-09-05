@@ -32,10 +32,14 @@
         <activity
             android:name="com.practicum.playlistmaker.SearchActivity"
             android:exported="false" />
+
         <activity
             android:name="com.practicum.playlistmaker.MediaActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".PlayerActivity"
+            android:exported="false" />
 
     </application>
 
