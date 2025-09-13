@@ -11,7 +11,8 @@ object TrackMock {
             "Album",
             "2009",
             "Rock",
-            "USA"
+            "USA",
+            ""
         ),
         Track(
             2,
@@ -22,7 +23,8 @@ object TrackMock {
             "Album",
             "2009",
             "Rock",
-            "USA"
+            "USA",
+            ""
         ),
         Track(
             3,
@@ -33,7 +35,8 @@ object TrackMock {
             "Album",
             "2012",
             "Pop",
-            "USA"
+            "USA",
+            ""
         ),
         Track(
             4,
@@ -44,7 +47,8 @@ object TrackMock {
             "Album",
             "2009",
             "Rock",
-            "USA"
+            "USA",
+            ""
         ),
 
         Track(
@@ -56,7 +60,8 @@ object TrackMock {
             "Album",
             "2009",
             "Rock",
-            "USA"
+            "USA",
+            ""
         )
     )
 }

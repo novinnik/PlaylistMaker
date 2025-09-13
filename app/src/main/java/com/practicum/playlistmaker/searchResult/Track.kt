@@ -18,7 +18,8 @@ data class Track(
     val collectionName : String?, //название альбома
     val releaseDate: String?, //год релиза трека
     val primaryGenreName: String?, //жанр трека
-    val country: String? //страна исполнителя
+    val country: String?, //страна исполнителя
+    val previewUrl : String? //ссылка на отрывок трека
 ) :Parcelable {
 
     fun getCoverArtwork() = albumPoster?.replaceAfterLast('/', "512x512bb.jpg")

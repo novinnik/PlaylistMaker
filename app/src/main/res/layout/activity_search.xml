@@ -40,6 +40,11 @@
 
     </FrameLayout>
 
+    <ProgressBar
+        android:id="@+id/search_progress_bar"
+        style="@style/style_progress_bar"
+        android:visibility="gone"/>
+
     <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">

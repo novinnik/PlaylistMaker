@@ -1,7 +1,10 @@
 package com.practicum.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -18,34 +21,43 @@ import com.practicum.playlistmaker.searchResult.*
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var mediaPlayer : ConstraintLayout
-    private var playerStatus = STATUS_DEFAULT
-    private var currentTrack : Track? = null
-    private lateinit var backButtonToolbar : MaterialToolbar
+    private lateinit var mediaPlayerLayout: ConstraintLayout
+
+    private var player = MediaPlayer()
+
+    private var timeProgress = 0L
+    private var trackUrl : String? = null
+    private var playerState = PlayerStatus.DEFAULT
+    private var currentTrack: Track? = null
+
+    private val playerHandler = Handler(Looper.getMainLooper())
+    private var timerRunnable = Runnable{ setValueTimer() }
+
+    private lateinit var backButtonToolbar: MaterialToolbar
 
     //описание и обложка трека
-    private lateinit var imagePoster : ImageView
-    private lateinit var trackName : TextView
-    private lateinit var artistName : TextView
+    private lateinit var imagePoster: ImageView
+    private lateinit var trackName: TextView
+    private lateinit var artistName: TextView
 
     //кнопки управления
-    private lateinit var btnQueue : ImageButton
-    private lateinit var btnPlay : ImageButton
-    private lateinit var btnFavorite : ImageButton
+    private lateinit var btnQueue: ImageButton
+    private lateinit var btnPlay: ImageButton
+    private lateinit var btnFavorite: ImageButton
 
     //время трека
-    private lateinit var playTrackProgress : TextView
+    private lateinit var playTrackProgress: TextView
 
     //данные трека
-    private lateinit var trackDurationValue : TextView
-    private lateinit var trackCollectionValue : TextView
-    private lateinit var trackYearValue : TextView
-    private lateinit var trackGenreValue : TextView
-    private lateinit var trackCountryValue : TextView
+    private lateinit var trackDurationValue: TextView
+    private lateinit var trackCollectionValue: TextView
+    private lateinit var trackYearValue: TextView
+    private lateinit var trackGenreValue: TextView
+    private lateinit var trackCountryValue: TextView
 
     //группы видимости
-    private lateinit var groupCollection : Group
-    private lateinit var groupYear : Group
+    private lateinit var groupCollection: Group
+    private lateinit var groupYear: Group
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,12 +78,17 @@ class PlayerActivity : AppCompatActivity() {
 
         currentTrack?.let { addMediaTrack(it) }
 
+        playerPrepare()
+
+        btnPlay.setOnClickListener{
+            playerControl()
+        }
     }
 
-    private fun initViews(){
+    private fun initViews() {
         backButtonToolbar = findViewById(R.id.toolbar_activity_player)
 
-        mediaPlayer = findViewById(R.id.constraint_layout_player)
+        mediaPlayerLayout = findViewById(R.id.constraint_layout_player)
 
         imagePoster = findViewById(R.id.play_image_poster)
         trackName = findViewById(R.id.play_track_name)
@@ -93,7 +110,7 @@ class PlayerActivity : AppCompatActivity() {
         groupYear = findViewById(R.id.play_group_year)
     }
 
-    fun addMediaTrack(track: Track){
+    fun addMediaTrack(track: Track) {
         Glide.with(this)
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.ic_placeholder)
@@ -104,7 +121,7 @@ class PlayerActivity : AppCompatActivity() {
         trackName.text = track.trackName
         artistName.text = track.artistName
 
-        playTrackProgress.text = timeConversion(0L)
+        playTrackProgress.text = timeConversion(timeProgress)
         trackDurationValue.text = timeConversion(track.trackTime)
 
         if (track.collectionName.isNullOrEmpty()) {
@@ -114,7 +131,7 @@ class PlayerActivity : AppCompatActivity() {
             groupCollection.visibility = View.VISIBLE
         }
 
-        if (track.releaseDate.isNullOrEmpty()){
+        if (track.releaseDate.isNullOrEmpty()) {
             groupYear.visibility = View.GONE
         } else {
             trackYearValue.text = track.getYearDateRelease()
@@ -123,17 +140,89 @@ class PlayerActivity : AppCompatActivity() {
 
         trackGenreValue.text = track.primaryGenreName ?: ""
         trackCountryValue.text = track.country ?: ""
+
+        trackUrl = track.previewUrl ?:""
     }
 
-    companion object{
-        //состоние плеера, на данном этапе изменение не требуется
-        private const val STATUS_DEFAULT = 0 //по умолчанию
-        private const val STATUS_PREPARED = 1 //подготовка
-        private const val STATUS_PLAY = 2 //проигрывание
-        private const val STATUS_PAUSE = 3 //пауза
+    override fun onPause() {
+        super.onPause()
+        playerPause()
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
+        playerHandler.removeCallbacksAndMessages(null)
+    }
+
+    private fun playerPrepare(){
+        if (!trackUrl.isNullOrEmpty()){
+            player.setDataSource(trackUrl)
+            player.prepareAsync()
+            player.setOnPreparedListener {
+                playerState = PlayerStatus.PREPARED
+            }
+            player.setOnCompletionListener {
+                playerState = PlayerStatus.PREPARED
+                playerHandler.removeCallbacks(timerRunnable)
+                changeImageButtonPlay()
+                playTrackProgress.text = timeConversion(timeProgress)
+
+            }
+        }
+    }
+
+    private fun playerControl(){
+        when(playerState){
+            PlayerStatus.PLAY -> playerPause()
+            PlayerStatus.PAUSE, PlayerStatus.PREPARED -> playerStart()
+            PlayerStatus.DEFAULT -> {}
+        }
+    }
+
+    private fun playerStart(){
+        player.start()
+        playerState = PlayerStatus.PLAY
+        playerHandler.postDelayed(timerRunnable, PLAY_DELAY)
+        changeImageButtonPlay()
+    }
+
+    private fun playerPause(){
+        player.pause()
+        playerState = PlayerStatus.PAUSE
+        playerHandler.removeCallbacks(timerRunnable)
+        changeImageButtonPlay()
+    }
+
+    private fun changeImageButtonPlay(){
+        when(playerState){
+            PlayerStatus.PLAY -> btnPlay.setImageResource(R.drawable.ic_pause)
+            PlayerStatus.PAUSE, PlayerStatus.PREPARED -> btnPlay.setImageResource(R.drawable.ic_play)
+            PlayerStatus.DEFAULT -> {btnPlay.setImageResource(R.drawable.ic_play)}
+        }
+
+    }
+
+    private fun setValueTimer(){
+        playTrackProgress.text = timeConversion(player.currentPosition.toLong())
+        if (playerState == PlayerStatus.PLAY) {
+            playerHandler.postDelayed(timerRunnable, PLAY_DELAY)
+        }
+    }
+
+    companion object {
         private const val CORNER_RADIUS = 8f
         const val MEDIA_TRACK_KEY = "media_track_key"
+        const val PLAY_DELAY = 500L
+    }
+
+    enum class PlayerStatus{
+        //состоние плеера, на данном этапе изменение не требуется
+        DEFAULT, //по умолчанию
+        PREPARED,  //подготовка
+        PLAY, //проигрывание
+        PAUSE //пауза
+
     }
 
 }
