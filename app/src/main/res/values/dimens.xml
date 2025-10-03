@@ -24,4 +24,6 @@
 
     <dimen name="player_bt_play">100dp</dimen>
     <dimen name="player_barrier_name_header">140dp</dimen>
+
+    <dimen name="size_progress_bar">44dp</dimen>
 </resources>

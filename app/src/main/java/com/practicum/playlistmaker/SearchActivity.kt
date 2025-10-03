@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -14,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
@@ -52,6 +55,12 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historySharedPreferences: SharedPreferences
     private lateinit var historylistener: SharedPreferences.OnSharedPreferenceChangeListener
 
+    //прогресс бар
+    private lateinit var progressBar: ProgressBar
+    private val searchHandler = Handler(Looper.getMainLooper())
+    private var searchRunnable: Runnable? = null
+    private var isClickAllowed = true
+
     enum class StateSearch {
         CLEAR,    //очистка
         ERROR,    //ошибка
@@ -65,6 +74,9 @@ class SearchActivity : AppCompatActivity() {
 
         val backButtonToolbar = findViewById<MaterialToolbar>(R.id.toolbar_activity_search)
         backButtonToolbar.setNavigationOnClickListener { finish() }
+
+        //отслеживнаие состояния прогресс база
+        progressBar = findViewById(R.id.search_progress_bar)
 
         historySharedPreferences = getSharedPreferences(SEARCH_HISTORY_PREF, MODE_PRIVATE)
         historySearch = SearchHistory(historySharedPreferences)
@@ -81,6 +93,14 @@ class SearchActivity : AppCompatActivity() {
                 clearButtonSearch.visibility = clearButtonVisibility(s)
                 textSearch = if (!s.isNullOrEmpty()) s.toString() else TEXT_EMPTY
                 historyChangeVisibility(inputSearchText.hasFocus(), s.isNullOrEmpty())
+
+                searchRunnable?.let { runnable -> searchHandler.removeCallbacks(runnable) }
+                searchRunnable = Runnable {
+                    if (!s.isNullOrEmpty() && isClickAllowed){
+                        searchTrack(textSearch)
+                    }
+                }
+                searchHandler.postDelayed(searchRunnable!!, SEARCH_DEBOUNCE_DELAY)
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -93,12 +113,14 @@ class SearchActivity : AppCompatActivity() {
             inputSearchText.setText(TEXT_EMPTY)
             val inputMM = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMM?.hideSoftInputFromWindow(inputSearchText.windowToken, 0)
+            searchRunnable?.let { runnable -> searchHandler.removeCallbacks (runnable) }
         }
 
         inputSearchText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val query = inputSearchText.text.toString()
                 if (query.isNotEmpty()) {
+                    searchRunnable?.let { runnable -> searchHandler.removeCallbacks (runnable) }
                     searchTrack(query)
                 }
             }
@@ -209,6 +231,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchTrack(text: String) {
         updateUI(StateSearch.CLEAR)
+        progressBar.visibility = View.VISIBLE
 
         iTunesService //сервис api
             .search(text) //вызываем метод отправляем запрос
@@ -249,32 +272,52 @@ class SearchActivity : AppCompatActivity() {
                 recyclerSearch.visibility = View.GONE
                 noConnectionPlaceholder.visibility = View.GONE
                 errorPlaceholder.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
             }
 
             StateSearch.ERROR -> {
                 recyclerSearch.visibility = View.GONE
                 noConnectionPlaceholder.visibility = View.VISIBLE
                 errorPlaceholder.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
 
             StateSearch.SUCCESS -> {
                 recyclerSearch.visibility = View.VISIBLE
                 noConnectionPlaceholder.visibility = View.GONE
                 errorPlaceholder.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
 
             StateSearch.CLEAR ->  {
                 recyclerSearch.visibility = View.GONE
                 noConnectionPlaceholder.visibility = View.GONE
                 errorPlaceholder.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
         }
     }
 
     private fun startActivityPlayer(trackClicked:Track){
-        val mediaIntent = Intent(this@SearchActivity, PlayerActivity::class.java)
-        mediaIntent.putExtra(MEDIA_TRACK_KEY, trackClicked)
-        startActivity(mediaIntent)
+        if (clickDebounce()){
+            val mediaIntent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            mediaIntent.putExtra(MEDIA_TRACK_KEY, trackClicked)
+            startActivity(mediaIntent)
+        }
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            searchHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        searchHandler.removeCallbacksAndMessages(null)
     }
 
     companion object {
@@ -282,5 +325,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_STRING = "SEARCH_STRING"
         const val SEARCH_HISTORY_PREF = "search_history_pref"
         const val MEDIA_TRACK_KEY = "media_track_key"
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }
