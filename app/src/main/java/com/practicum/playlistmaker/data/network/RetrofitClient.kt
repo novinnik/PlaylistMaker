@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.data.network
 
-
-import com.practicum.playlistmaker.BASE_URL_ITUNES
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+private const val BASE_URL_ITUNES = "https://itunes.apple.com"
 
 object RetrofitClient{
 

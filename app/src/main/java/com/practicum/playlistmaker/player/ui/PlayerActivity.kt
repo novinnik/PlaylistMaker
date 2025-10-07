@@ -8,26 +8,24 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Group
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.appbar.MaterialToolbar
-import com.practicum.playlistmaker.CORNER_RADIUS
 import com.practicum.playlistmaker.Creator
-import com.practicum.playlistmaker.MEDIA_TRACK_KEY
-import com.practicum.playlistmaker.PLAY_DELAY
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.dpToPx
 import com.practicum.playlistmaker.search.domain.models.timeConversion
+
+private const val CORNER_RADIUS = 8f
+private const val MEDIA_TRACK_KEY = "media_track_key"
+private const val PLAY_DELAY = 500L
 
 class PlayerActivity : AppCompatActivity() {
 

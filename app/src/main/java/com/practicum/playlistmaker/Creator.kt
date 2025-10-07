@@ -35,6 +35,7 @@ object Creator {
     }
 
     fun provideSharedPreferences(): SharedPreferences{
+        val SEARCH_HISTORY_PREF = "search_history_pref"
         return application.getSharedPreferences(SEARCH_HISTORY_PREF, Context.MODE_PRIVATE )
     }
 

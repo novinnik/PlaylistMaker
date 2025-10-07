@@ -1,10 +1,11 @@
 package com.practicum.playlistmaker.search.data.impl
 
 import com.practicum.playlistmaker.Creator
-import com.practicum.playlistmaker.MAX_LIMIT_SIZE_HISTORY
 import com.practicum.playlistmaker.search.data.local.SearchHistory
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
 import com.practicum.playlistmaker.search.domain.models.Track
+
+private const val MAX_LIMIT_SIZE_HISTORY = 10
 
 class HistoryRepositoryImpl() : HistoryRepository{
 

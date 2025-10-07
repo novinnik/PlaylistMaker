@@ -17,22 +17,16 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.practicum.playlistmaker.Creator
-import com.practicum.playlistmaker.MEDIA_TRACK_KEY
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.SEARCH_HISTORY_PREF
 import com.practicum.playlistmaker.search.data.local.SearchHistory
 import com.practicum.playlistmaker.search.domain.api.TracksSearchInteractor
 import com.practicum.playlistmaker.search.domain.models.ResultSearch
 import com.practicum.playlistmaker.search.domain.models.Track
-
 
 class SearchActivity : AppCompatActivity() {
 
@@ -334,5 +328,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_STRING = "SEARCH_STRING"
         const val CLICK_DEBOUNCE_DELAY = 1000L
         const val SEARCH_DEBOUNCE_DELAY = 2000L
+        const val MEDIA_TRACK_KEY = "media_track_key"
+        const val SEARCH_HISTORY_PREF = "search_history_pref"
     }
 }

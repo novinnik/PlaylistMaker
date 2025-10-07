@@ -9,13 +9,13 @@ class PlayerRepositoryImpl: PlayerRepository{
 
     override fun playerPrepare(
         trackUrl: String,
-        onPreparedListener: (MediaPlayer) -> Unit,
-        onCompletionListener: (MediaPlayer) -> Unit
+        onPreparedListener: () -> Unit,
+        onCompletionListener: () -> Unit
     ) {
             player.setDataSource(trackUrl)
             player.prepareAsync()
-            player.setOnPreparedListener (onPreparedListener)
-            player.setOnCompletionListener (onCompletionListener)
+            player.setOnPreparedListener {onPreparedListener()}
+            player.setOnCompletionListener {onCompletionListener()}
     }
 
     override fun playerStart() {

@@ -3,9 +3,10 @@ package com.practicum.playlistmaker.search.data.local
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.KEY_HISTORY_TRACKS
-import com.practicum.playlistmaker.MAX_LIMIT_SIZE_HISTORY
 import com.practicum.playlistmaker.search.domain.models.Track
+
+private const val MAX_LIMIT_SIZE_HISTORY = 10
+private const val KEY_HISTORY_TRACKS = "key_history_tracks"
 
 class SearchHistory(private val preferences: SharedPreferences) {
     private val gson = Gson()
