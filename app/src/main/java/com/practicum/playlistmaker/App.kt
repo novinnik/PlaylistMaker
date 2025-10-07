@@ -2,35 +2,38 @@ package com.practicum.playlistmaker
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 
+const val PLAYLIST_MAKER_PREFERENCES = "PLAYLIST_MAKER_PREFERENCES"
+const val BASE_URL_ITUNES = "https://itunes.apple.com"
+const val DARK_THEME = "DARK_THEME"
+//const val TRACK_HISTORY = "TRACK_HISTORY"
+const val MAX_LIMIT_SIZE_HISTORY = 10
+const val CORNER_RADIUS = 8f
+const val MEDIA_TRACK_KEY = "media_track_key"
+const val PLAY_DELAY = 500L
+const val KEY_HISTORY_TRACKS = "key_history_tracks"
+const val SEARCH_HISTORY_PREF = "search_history_pref"
+
 class App:Application() {
-    var darkTheme = false
-    lateinit var sharedPreferences : SharedPreferences
 
     override fun onCreate() {
         super.onCreate()
-
-        sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-
-        darkTheme = sharedPreferences.getBoolean(DARK_THEME, false)
-
-        applyDarkTheme()
-
+        Creator.initApplication(this)
+        applyDarkTheme(getDarkTheme())
     }
 
-    fun switchTheme(darkThemeEnabled : Boolean){
-        darkTheme = darkThemeEnabled
-
-        sharedPreferences.edit()
-            .putBoolean(DARK_THEME, darkTheme)
-            .apply()
-
-        applyDarkTheme()
-
+    private fun getDarkTheme(): Boolean{
+        val darkTheme =
+            when(resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK){
+            Configuration.UI_MODE_NIGHT_YES -> true
+            else -> false}
+        val sharedPreferences = Creator.provideSharedPreferences()
+        return sharedPreferences.getBoolean(DARK_THEME, darkTheme)
     }
 
-    fun applyDarkTheme(){
+    private fun applyDarkTheme(darkTheme: Boolean){
         AppCompatDelegate.setDefaultNightMode(
             if (darkTheme){
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -40,8 +43,5 @@ class App:Application() {
         )
     }
 
-    companion object{
-        const val PLAYLIST_MAKER_PREFERENCES = "PLAYLIST_MAKER_PREFERENCES"
-        const val DARK_THEME = "DARK_THEME"
-    }
+
 }
