@@ -12,10 +12,10 @@ class PlayerRepositoryImpl: PlayerRepository{
         onPreparedListener: () -> Unit,
         onCompletionListener: () -> Unit
     ) {
-            player.setDataSource(trackUrl)
-            player.prepareAsync()
-            player.setOnPreparedListener {onPreparedListener()}
-            player.setOnCompletionListener {onCompletionListener()}
+        player.setDataSource(trackUrl)
+        player.prepareAsync()
+        player.setOnPreparedListener {onPreparedListener()}
+        player.setOnCompletionListener {onCompletionListener()}
     }
 
     override fun playerStart() {

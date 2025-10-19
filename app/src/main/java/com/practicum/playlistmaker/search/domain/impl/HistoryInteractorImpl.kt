@@ -11,10 +11,15 @@ class HistoryInteractorImpl(private val historyRepository: HistoryRepository): H
     }
 
     override fun updateHistory(tracks: ArrayList<Track>): ArrayList<Track> {
-       return historyRepository.updateHistory(tracks)
+        return historyRepository.updateHistory(tracks)
     }
 
     override fun addToHistory(tracks: ArrayList<Track>, newTrack: Track) {
         historyRepository.addToHistory(tracks, newTrack)
     }
+
+    override fun getHistory(): ArrayList<Track> {
+        return historyRepository.getHistory()
+    }
+
 }

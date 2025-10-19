@@ -27,5 +27,3 @@ class RetrofitNetworkClient() : NetworkClient {
         return NetworkResponse().apply { resultCode = -1 }
     }
 }
-
-

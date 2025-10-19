@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_player"
     style="@style/ActivityHeaderStyle"
-    tools:context=".player.ui.PlayerActivity">
+    tools:context=".player.ui.activity.PlayerActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_activity_player"
