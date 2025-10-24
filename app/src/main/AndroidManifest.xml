@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name="com.practicum.playlistmaker.App"
+        android:name="com.practicum.playlistmaker.util.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,11 +26,11 @@
         </activity>
 
         <activity
-            android:name="com.practicum.playlistmaker.setting.ui.SettingsActivity"
+            android:name="com.practicum.playlistmaker.setting.ui.activity.SettingsActivity"
             android:exported="false" />
 
         <activity
-            android:name="com.practicum.playlistmaker.search.ui.SearchActivity"
+            android:name="com.practicum.playlistmaker.search.ui.activity.SearchActivity"
             android:exported="false" />
 
         <activity
@@ -38,7 +38,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".player.ui.PlayerActivity"
+            android:name=".player.ui.activity.PlayerActivity"
             android:exported="false" />
 
     </application>

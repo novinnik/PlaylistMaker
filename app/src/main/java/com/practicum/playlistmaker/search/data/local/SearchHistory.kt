@@ -12,12 +12,12 @@ class SearchHistory(private val preferences: SharedPreferences) {
     private val gson = Gson()
 
     //получить список треков из истории
-    fun getHistory(): List<Track> {
+    fun getHistory(): ArrayList<Track> {
         val historyJson = preferences.getString(KEY_HISTORY_TRACKS, null)
         return if (!historyJson.isNullOrEmpty()) {
             gson.fromJson(historyJson, object : TypeToken<List<Track>>() {}.type)
         } else {
-            emptyList()
+            arrayListOf()
         }
     }
 

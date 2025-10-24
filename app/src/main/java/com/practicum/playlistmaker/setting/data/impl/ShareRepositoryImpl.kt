@@ -34,5 +34,3 @@ class ShareRepositoryImpl(private val context: Context): ShareRepository {
         context.startActivity(supportIntent)
     }
 }
-
-

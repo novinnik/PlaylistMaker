@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.search.data.impl
 
-import com.practicum.playlistmaker.Creator
+import com.practicum.playlistmaker.util.Creator
 import com.practicum.playlistmaker.search.data.local.SearchHistory
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -25,19 +25,11 @@ class HistoryRepositoryImpl() : HistoryRepository{
     }
 
     override fun addToHistory(tracks: ArrayList<Track>, newTrack: Track) {
-        tracks.clear()
+        historySearch.addToHistory(newTrack)
+    }
 
-        tracks.addAll(historySearch.getHistory())
-        //удаление элемента, если присутствует в списке
-        tracks.removeAll{it.id == newTrack.id}
-        //добавляем в начало
-        tracks.add(0, newTrack)
-        //проверяем на ограничение кол-ва
-        if (tracks.size > MAX_LIMIT_SIZE_HISTORY){
-            tracks.removeAt(tracks.size - 1)
-        }
-        //сохраним новый список
-        historySearch.saveHistory(tracks)
+    override fun getHistory(): ArrayList<Track> {
+        return historySearch.getHistory() as ArrayList<Track>
     }
 
 }

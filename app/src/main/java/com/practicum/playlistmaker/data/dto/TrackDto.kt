@@ -13,5 +13,4 @@ data class TrackDto(
     val primaryGenreName: String?, //жанр трека
     val country: String?, //страна исполнителя
     val previewUrl : String? //ссылка на отрывок трека
-) {
-}
+)

@@ -1,8 +1,9 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.util
 
 import android.app.Application
+import com.practicum.playlistmaker.util.Creator
 
-class App:Application() {
+class App: Application() {
 
     override fun onCreate() {
         super.onCreate()

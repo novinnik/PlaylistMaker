@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.util
 
 import android.app.Application
 import android.content.Context
@@ -24,7 +24,6 @@ import com.practicum.playlistmaker.setting.domain.api.ThemeRepository
 import com.practicum.playlistmaker.setting.domain.impl.ShareInteractorImpl
 import com.practicum.playlistmaker.setting.domain.impl.ThemeInteractorImpl
 
-
 object Creator {
     private lateinit var application: Application
     private lateinit var context: Context
@@ -34,13 +33,13 @@ object Creator {
         context = application.applicationContext
     }
 
-    fun provideSharedPreferences(): SharedPreferences{
+    fun provideSharedPreferences(): SharedPreferences {
         val SEARCH_HISTORY_PREF = "search_history_pref"
         return application.getSharedPreferences(SEARCH_HISTORY_PREF, Context.MODE_PRIVATE )
     }
 
     //tracks
-    fun getTracksRepository(): TracksSearchRepository{
+    fun getTracksRepository(): TracksSearchRepository {
         return TracksSearchRepositoryImpl(RetrofitNetworkClient())
     }
 
@@ -66,10 +65,10 @@ object Creator {
 
     //theme
     private fun getThemeRepository(): ThemeRepository {
-         return ThemeRepositoryImpl(provideSharedPreferences())
+        return ThemeRepositoryImpl(provideSharedPreferences())
     }
 
-    fun provideThemeInteractor(): ThemeInteractor{
+    fun provideThemeInteractor(): ThemeInteractor {
         return ThemeInteractorImpl(getThemeRepository())
     }
 
@@ -79,7 +78,7 @@ object Creator {
         return ShareRepositoryImpl(context)
     }
 
-    fun provideShareInteractor(): ShareInteractor{
+    fun provideShareInteractor(): ShareInteractor {
         return ShareInteractorImpl(getShareRepository())
     }
 

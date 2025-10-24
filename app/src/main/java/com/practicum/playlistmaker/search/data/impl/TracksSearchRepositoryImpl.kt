@@ -13,7 +13,7 @@ class TracksSearchRepositoryImpl(private val networkClient: NetworkClient): Trac
     override fun searchTracks(expression: String): ResultSearch {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         val tracks = ArrayList<TrackDto>()
-        var results: List<Track> = emptyList()
+        var results: ArrayList<Track> = arrayListOf()
 
         if (response.resultCode == 200) {
             tracks.addAll((response as TracksSearchResponse).results)
@@ -21,10 +21,10 @@ class TracksSearchRepositoryImpl(private val networkClient: NetworkClient): Trac
                 it.trackName.isNullOrEmpty() || it.collectionName.isNullOrEmpty() ||
                         it.previewUrl.isNullOrEmpty() || it.trackTime == 0L
             }
-            results =  tracks.map {
+            results = tracks.map {
                 Track(it.id, it.trackName, it.artistName, it.trackTime,
                     it.albumPoster, it.collectionName, it.releaseDate,
-                    it.primaryGenreName, it.country, it.previewUrl)}
+                    it.primaryGenreName, it.country, it.previewUrl)} as ArrayList<Track>
         }
 
         return ResultSearch(results, response.resultCode)
