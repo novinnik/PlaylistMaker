@@ -5,35 +5,19 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
 import com.practicum.playlistmaker.search.domain.models.timeConversion
-import com.practicum.playlistmaker.util.Creator
 
-
-class PlayerViewModel(private val trackUrl: String? =""): ViewModel() {
-
-    companion object{
-
-        private const val PLAY_DELAY = 500L
-        private const val TIME_ZERO = 0L
-
-        fun getFactory(trackUrl: String?): ViewModelProvider.Factory = viewModelFactory {
-            initializer(){
-                PlayerViewModel(trackUrl)
-            }
-        }
-    }
+class PlayerViewModel(private val trackUrl: String,
+                      private val playerInteractor: PlayerInteractor): ViewModel() {
 
     private val playerStateLiveData = MutableLiveData(PlayerStatus.DEFAULT)
     fun observePlayerState(): LiveData<PlayerStatus> = playerStateLiveData
 
-    private val progressTimeLiveDate = MutableLiveData("00:00")
+    private val progressTimeLiveDate = MutableLiveData(TIME_ZERO)
     fun observePlayerTimer(): LiveData<String> = progressTimeLiveDate
 
-    private val playerInteractor = Creator.providePlayerInteractor()
     private val playerHandler = Handler(Looper.getMainLooper())
 
     private val timerRunnable =  Runnable {
@@ -51,7 +35,7 @@ class PlayerViewModel(private val trackUrl: String? =""): ViewModel() {
         val timeProgress  = timeConversion(playerInteractor.getCurrentPosition().toLong())
         progressTimeLiveDate.postValue(timeProgress)
 
-        playerHandler.postDelayed(timerRunnable, TIME_ZERO)
+        playerHandler.postDelayed(timerRunnable, PLAY_DELAY)
     }
 
     private fun pauseTimer() {
@@ -62,12 +46,12 @@ class PlayerViewModel(private val trackUrl: String? =""): ViewModel() {
     private fun resetTimer() {
         //помимо остановки, сбрасываем таймер
         playerHandler.removeCallbacks(timerRunnable)
-        progressTimeLiveDate.postValue(timeConversion(TIME_ZERO))
+        progressTimeLiveDate.postValue(TIME_ZERO)
     }
 
     //работа плеера
     private fun playerPrepare(){
-        trackUrl?.let{
+        trackUrl.let{
 
             playerInteractor.playerPrepare(
                 it,
@@ -109,5 +93,8 @@ class PlayerViewModel(private val trackUrl: String? =""): ViewModel() {
         resetTimer()
     }
 
-
+    companion object{
+        private const val PLAY_DELAY = 500L
+        private const val TIME_ZERO = "00:00"
+    }
 }

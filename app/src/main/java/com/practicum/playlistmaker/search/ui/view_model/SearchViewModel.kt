@@ -1,36 +1,21 @@
 package com.practicum.playlistmaker.search.ui.view_model
 
-import android.app.Application
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksSearchInteractor
 import com.practicum.playlistmaker.search.domain.models.ResultSearch
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.model.TracksState
-import com.practicum.playlistmaker.util.Creator
 
-class SearchViewModel(private val context: Context): ViewModel() {
+class SearchViewModel(
+                      private val searchInteractor:TracksSearchInteractor,
+                      private val historyInteractor: HistoryInteractor
+    ): ViewModel() {
 
-    companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        //инициализация фабрики
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = (this[APPLICATION_KEY] as Application)
-                SearchViewModel(app)
-            }
-        }
-    }
-    private var searchInteractor = Creator.provideTrackInteractor()
-    private var historyInteractor= Creator.provideHistoryInteractor()
     private val searchHandler = Handler(Looper.getMainLooper())
 
     private val searchRunnable = Runnable{
@@ -39,10 +24,8 @@ class SearchViewModel(private val context: Context): ViewModel() {
     }
 
     private var lastSearchText: String? = null
-
     private var stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
-
     private val historyLiveData = MutableLiveData<ArrayList<Track>>()
     fun observeHistory(): LiveData<ArrayList<Track>> = historyLiveData
 
@@ -51,7 +34,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
     }
 
     fun initHistory(){
-        historyLiveData.postValue(historyInteractor.getHistory())
+        historyLiveData.value = historyInteractor.getHistory()
     }
 
     private val consumer = object : TracksSearchInteractor.TracksConsumer{
@@ -113,5 +96,9 @@ class SearchViewModel(private val context: Context): ViewModel() {
         initHistory()
     }
 
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+
+    }
 
 }

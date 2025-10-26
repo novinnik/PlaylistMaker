@@ -19,11 +19,13 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.model.TracksState
 import com.practicum.playlistmaker.search.ui.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-    private var viewModel: SearchViewModel? = null
+//    private var viewModel: SearchViewModel? = null
+    private val viewModel by viewModel<SearchViewModel>()
     private var isClickAllowed = true
     private var simpleTextWatcher: TextWatcher? = null
     private val searchHandler = Handler(Looper.getMainLooper())
@@ -43,12 +45,12 @@ class SearchActivity : AppCompatActivity() {
 
         val historyList = arrayListOf<Track>()
 
-        viewModel = ViewModelProvider(this, SearchViewModel.getFactory())
-            .get(SearchViewModel::class.java)
+//        viewModel = ViewModelProvider(this, SearchViewModel.getFactory())
+//            .get(SearchViewModel::class.java)
 
-        viewModel?.observeState()?.observe(this) { render(it) }
+        viewModel.observeState().observe(this) { render(it) }
 
-        viewModel?.observeHistory()?.observe(this) {
+        viewModel.observeHistory().observe(this) {
             historyList.clear()
             historyList.addAll(it)
         }
@@ -59,7 +61,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.btPlaceholderUpdate.setOnClickListener {
             updateUI(StateSearch.CLEAR)
-            viewModel?.debounceSearchTrack(binding.inputSearchText.text.toString())
+            viewModel.debounceSearchTrack(binding.inputSearchText.text.toString())
         }
 
         binding.clearButtonSearch.setOnClickListener {
@@ -85,7 +87,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.searchHistoryLayout.visibility = View.VISIBLE
                 } else {
                     binding.searchHistoryLayout.visibility = View.GONE
-                    viewModel?.debounceSearchTrack(changeText = s?.toString() ?: "")
+                    viewModel.debounceSearchTrack(changeText = s?.toString() ?: "")
                 }
             }
             override fun afterTextChanged(s: Editable?) {}
@@ -106,7 +108,7 @@ class SearchActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
 
                 if (binding.inputSearchText.text.toString().isNotEmpty()) {
-                    viewModel?.debounceSearchTrack(binding.inputSearchText.text.toString())
+                    viewModel.debounceSearchTrack(binding.inputSearchText.text.toString())
                 }
             }
             false
@@ -114,7 +116,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.trackSearchRecycler.adapter = TrackAdapter(trackList) { track ->
           //  if (clickDebounce()) {
-                viewModel?.addHistory(track)
+                viewModel.addHistory(track)
                 startActivityPlayer(track)
            // }
 
@@ -122,7 +124,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchHistoryRecyclerView.adapter = TrackAdapter(historyList) { track ->
             //if (clickDebounce()) {
-                viewModel?.addHistory(track)
+                viewModel.addHistory(track)
                 startActivityPlayer(track)
             //}
         }
@@ -140,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun clearHistorySearch() {
-        viewModel?.clearHistory()
+        viewModel.clearHistory()
         binding.searchHistoryRecyclerView.adapter?.notifyDataSetChanged()
         binding.searchHistoryLayout.visibility = View.GONE
 //        updateHistorySearch()

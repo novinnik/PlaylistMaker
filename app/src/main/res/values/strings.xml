@@ -28,4 +28,5 @@
     <string name="player_btn_play_description">Воспроизведение/Пауза</string>
     <string name="player_btn_add_description">Добавить в плейлист</string>
     <string name="player_btn_like_description">Добавить в избранное</string>
+    <string name="time_zero" translatable="false">00:00</string>
 </resources>

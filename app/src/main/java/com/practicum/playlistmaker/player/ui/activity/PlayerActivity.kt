@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
@@ -15,6 +14,7 @@ import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.models.dpToPx
 import com.practicum.playlistmaker.search.domain.models.timeConversion
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val CORNER_RADIUS = 8f
 private const val MEDIA_TRACK_KEY = "media_track_key"
@@ -22,7 +22,7 @@ private const val MEDIA_TRACK_KEY = "media_track_key"
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private var viewModel: PlayerViewModel? = null
+    private val viewModel by viewModel<PlayerViewModel>()
     private var timeProgress = 0L
     private var trackUrl : String? = null
     private var currentTrack: Track? = null
@@ -44,19 +44,16 @@ class PlayerActivity : AppCompatActivity() {
 
         currentTrack?.let { addMediaTrack(it) }
 
-        viewModel = ViewModelProvider(this, PlayerViewModel.getFactory(trackUrl))
-            .get(PlayerViewModel::class.java)
-
-        viewModel?.observePlayerState()?.observe(this) {
+        viewModel.observePlayerState().observe(this) {
             changeImageButtonPlay(it)
         }
 
-        viewModel?.observePlayerTimer()?.observe(this) {
+        viewModel.observePlayerTimer().observe(this) {
             binding.playTrackProgress.text = it
         }
 
         binding.btnPlay.setOnClickListener{
-            viewModel?.playerControl()
+            viewModel.playerControl()
         }
     }
 
@@ -96,7 +93,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        viewModel?.playerPause()
+        viewModel.playerPause()
     }
 
     private fun changeImageButtonPlay(playerState: PlayerStatus){
