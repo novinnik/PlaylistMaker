@@ -62,5 +62,5 @@ dependencies {
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.androidx.activity.ktx)
 
-    implementation("io.insert-koin:koin-android:3.3.0")
+    implementation(libs.koin.android)
 }
