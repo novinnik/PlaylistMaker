@@ -92,7 +92,7 @@ class SearchViewModel(
     }
 
     fun addHistory(track: Track){
-        historyInteractor.addToHistory(historyInteractor.getHistory(), track)
+        historyInteractor.addToHistory(track)
         initHistory()
     }
 

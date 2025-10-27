@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
-import com.practicum.playlistmaker.search.domain.models.timeConversion
+import com.practicum.playlistmaker.util.Converter.timeConversion
 
 class PlayerViewModel(private val trackUrl: String,
                       private val playerInteractor: PlayerInteractor): ViewModel() {

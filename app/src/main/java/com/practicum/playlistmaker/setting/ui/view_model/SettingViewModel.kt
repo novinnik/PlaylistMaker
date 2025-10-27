@@ -36,7 +36,7 @@ class SettingViewModel(private val context: Context,
         shareInteractor.writeSupport(shareData)
     }
 
-    fun swithDarkTheme(isDark:Boolean){
+    fun switchDarkTheme(isDark:Boolean){
         themeInteractor.saveTheme(isDark)
         themeInteractor.switchTheme(isDark)
         darkThemeLiveData.postValue(isDark)

@@ -12,7 +12,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.ui.activity.PlayerActivity
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -24,7 +23,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-//    private var viewModel: SearchViewModel? = null
     private val viewModel by viewModel<SearchViewModel>()
     private var isClickAllowed = true
     private var simpleTextWatcher: TextWatcher? = null
@@ -44,9 +42,6 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val historyList = arrayListOf<Track>()
-
-//        viewModel = ViewModelProvider(this, SearchViewModel.getFactory())
-//            .get(SearchViewModel::class.java)
 
         viewModel.observeState().observe(this) { render(it) }
 
@@ -75,7 +70,6 @@ class SearchActivity : AppCompatActivity() {
             val inputMM = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMM?.hideSoftInputFromWindow(binding.inputSearchText.windowToken, 0)
         }
-
 
         simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -128,8 +122,6 @@ class SearchActivity : AppCompatActivity() {
                 startActivityPlayer(track)
             //}
         }
-
-
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -145,10 +137,7 @@ class SearchActivity : AppCompatActivity() {
         viewModel.clearHistory()
         binding.searchHistoryRecyclerView.adapter?.notifyDataSetChanged()
         binding.searchHistoryLayout.visibility = View.GONE
-//        updateHistorySearch()
     }
-
-
 
     private fun updateUI(state: StateSearch) {
         when (state) {

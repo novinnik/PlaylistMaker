@@ -13,9 +13,6 @@ private const val MAX_LIMIT_SIZE_HISTORY = 10
 
 class HistoryRepositoryImpl(private val preferences: SharedPreferences, private val gson: Gson) : HistoryRepository{
 
-//    val historySharedPreferences = Creator.provideSharedPreferences()
-   // val historySearch = SearchHistory(historySharedPreferences, gson)
-
     override fun clearHistory(tracks: ArrayList<Track>) {
         //добавить очистку в настройках
         tracks.clear()
@@ -30,7 +27,7 @@ class HistoryRepositoryImpl(private val preferences: SharedPreferences, private 
         return tracks;
     }
 
-    override fun addToHistory(tracks: ArrayList<Track>, newTrack: Track) {
+    override fun addToHistory(newTrack: Track) {
         val historyList = getHistory().toMutableList()
         //удаление элемента, если присутствует в списке
         historyList.removeAll{it.id == newTrack.id}

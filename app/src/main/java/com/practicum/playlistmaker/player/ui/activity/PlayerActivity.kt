@@ -12,19 +12,20 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.search.domain.models.dpToPx
-import com.practicum.playlistmaker.search.domain.models.timeConversion
+import com.practicum.playlistmaker.util.Converter.dpToPx
+import com.practicum.playlistmaker.util.Converter.timeConversion
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 private const val CORNER_RADIUS = 8f
 private const val MEDIA_TRACK_KEY = "media_track_key"
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPlayerBinding
-    private val viewModel by viewModel<PlayerViewModel>()
-    private var timeProgress = 0L
     private var trackUrl : String? = null
+    private lateinit var binding: ActivityPlayerBinding
+    private val viewModel by viewModel<PlayerViewModel>{ parametersOf(trackUrl) }
+    private var timeProgress = 0L
     private var currentTrack: Track? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
