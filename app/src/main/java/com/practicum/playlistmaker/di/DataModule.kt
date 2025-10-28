@@ -30,8 +30,6 @@ val dataModule = module{
 
     factory { MediaPlayer() }
 
-    single{ NetworkResponse() }
-
 }
 
 private const val BASE_URL_ITUNES = "https://itunes.apple.com"
