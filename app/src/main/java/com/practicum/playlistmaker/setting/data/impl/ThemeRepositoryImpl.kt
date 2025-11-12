@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.setting.data.impl
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.setting.domain.api.ThemeRepository
+import androidx.core.content.edit
 
 private const val DARK_THEME = "DARK_THEME"
 
@@ -12,7 +13,7 @@ class ThemeRepositoryImpl(private val sharedPreferences: SharedPreferences) : Th
     }
 
     override fun saveTheme(darkTheme: Boolean) {
-        sharedPreferences.edit().putBoolean(DARK_THEME, darkTheme).apply()
+        sharedPreferences.edit { putBoolean(DARK_THEME, darkTheme) }
     }
 
     override fun switchTheme(darkTheme: Boolean) {

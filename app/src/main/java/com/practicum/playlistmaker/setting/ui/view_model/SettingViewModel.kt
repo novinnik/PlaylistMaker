@@ -1,35 +1,20 @@
 package com.practicum.playlistmaker.setting.ui.view_model
 
-import android.app.Application
-
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.setting.domain.api.ShareInteractor
 import com.practicum.playlistmaker.setting.domain.api.ThemeInteractor
 import com.practicum.playlistmaker.setting.domain.models.ShareData
-import com.practicum.playlistmaker.util.Creator
 
-class SettingViewModel(private val context: Context):ViewModel() {
+class SettingViewModel(private val context: Context,
+                       private val themeInteractor: ThemeInteractor,
+                       private val shareInteractor: ShareInteractor
+    ):ViewModel() {
 
-    private val themeInteractor: ThemeInteractor = Creator.provideThemeInteractor()
-    private val shareInteractor: ShareInteractor = Creator.provideShareInteractor()
-
-    companion object{
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = (this[APPLICATION_KEY] as Application)
-                SettingViewModel(app)
-            }
-        }
-    }
-    private val darktheme = themeInteractor.isDarkTheme()?:false
+//    private val darktheme = themeInteractor.isDarkTheme()
 
     private val darkThemeLiveData = MutableLiveData<Boolean>()
     fun getDarkTheme(): LiveData<Boolean> = darkThemeLiveData
@@ -51,7 +36,7 @@ class SettingViewModel(private val context: Context):ViewModel() {
         shareInteractor.writeSupport(shareData)
     }
 
-    fun swithDarkTheme(isDark:Boolean){
+    fun switchDarkTheme(isDark:Boolean){
         themeInteractor.saveTheme(isDark)
         themeInteractor.switchTheme(isDark)
         darkThemeLiveData.postValue(isDark)

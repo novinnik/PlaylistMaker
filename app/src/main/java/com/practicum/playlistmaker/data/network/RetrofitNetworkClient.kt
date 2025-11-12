@@ -4,10 +4,10 @@ package com.practicum.playlistmaker.data.network
 import com.practicum.playlistmaker.data.NetworkClient
 import com.practicum.playlistmaker.data.dto.NetworkResponse
 import com.practicum.playlistmaker.search.data.dto.TracksSearchRequest
+import retrofit2.Retrofit
 
-class RetrofitNetworkClient() : NetworkClient {
+class RetrofitNetworkClient(private val service: ITunesApiService) : NetworkClient {
 
-    val service = RetrofitClient.iTunesApiService()
 
     override fun doRequest(dto: Any): NetworkResponse {
         try{
