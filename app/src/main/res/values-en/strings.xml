@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
     <string name="search">Search</string>
-    <string name="media">Media</string>
+    <string name="media">Library</string>
     <string name="setting">Settings</string>
     <string name="dark_themes">Dark theme</string>
     <string name="share_application">Share the application</string>
@@ -25,4 +25,9 @@
     <string name="player_btn_play_description">Play/Pause</string>
     <string name="player_btn_add_description">Add to playlist</string>
     <string name="player_btn_like_description">Add to favorite</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="no_playlist">"You haven't created\n any playlists."</string>
+    <string name="no_media">Your library is empty</string>
+    <string name="playlists">Playlists</string>
+    <string name="select_tracks">Featured tracks</string>
 </resources>
