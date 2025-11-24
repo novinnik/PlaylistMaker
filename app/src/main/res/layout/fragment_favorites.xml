@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".media.ui.FavoritesFragment">
+    tools:context=".media.ui.favorites.FavoritesFragment">
 
     <ImageView
         android:id="@+id/error_image_fragment_favorites"

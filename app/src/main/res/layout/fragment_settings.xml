@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_setting"
     style="@style/ActivityHeaderStyle"
-    tools:context=".setting.ui.activity.SettingsActivity">
+    tools:context=".setting.ui.activity.SettingsFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_activity_setting"
-        style="@style/activity_header_button.icon"
+        style="@style/activity_header_button"
         app:title="@string/setting"
         />
 

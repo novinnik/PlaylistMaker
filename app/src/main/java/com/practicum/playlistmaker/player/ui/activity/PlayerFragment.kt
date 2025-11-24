@@ -2,13 +2,16 @@ package com.practicum.playlistmaker.player.ui.activity
 
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -16,40 +19,45 @@ import com.practicum.playlistmaker.util.Converter.dpToPx
 import com.practicum.playlistmaker.util.Converter.timeConversion
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.getValue
 
-private const val CORNER_RADIUS = 8f
-private const val MEDIA_TRACK_KEY = "media_track_key"
+class PlayerFragment: Fragment() {
 
-class PlayerActivity : AppCompatActivity() {
-
+    private var _binding: FragmentPlayerBinding? = null
+    private val binding get() = _binding!!
     private var trackUrl : String? = null
-    private lateinit var binding: ActivityPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>{ parametersOf(trackUrl) }
     private var timeProgress = 0L
     private var currentTrack: Track? = null
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding.toolbarActivityPlayer.setNavigationOnClickListener { finish() }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.toolbarActivityPlayer.setOnClickListener { findNavController().navigateUp() }
 
         currentTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(MEDIA_TRACK_KEY, Track::class.java)
+            requireArguments().getParcelable(MEDIA_TRACK_KEY, Track::class.java)
         } else {
             @Suppress("DEPRECATION") // Для старых версий SDK
-            intent.getParcelableExtra(MEDIA_TRACK_KEY)
+            requireArguments().getParcelable(MEDIA_TRACK_KEY)
         }
 
         currentTrack?.let { addMediaTrack(it) }
 
-        viewModel.observePlayerState().observe(this) {
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
             changeImageButtonPlay(it)
         }
 
-        viewModel.observePlayerTimer().observe(this) {
+        viewModel.observePlayerTimer().observe(viewLifecycleOwner) {
             binding.playTrackProgress.text = it
         }
 
@@ -58,12 +66,17 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun addMediaTrack(track: Track) {
         Glide.with(this)
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.ic_placeholder)
             .fitCenter()
-            .transform(RoundedCorners(dpToPx(CORNER_RADIUS, this)))
+            .transform(RoundedCorners(dpToPx(CORNER_RADIUS, requireContext())))
             .into(binding.playImagePoster)
 
         binding.playTrackName.text = track.trackName
@@ -103,5 +116,13 @@ class PlayerActivity : AppCompatActivity() {
             PlayerStatus.PAUSE, PlayerStatus.PREPARED -> binding.btnPlay.setImageResource(R.drawable.ic_play)
             PlayerStatus.DEFAULT -> {binding.btnPlay.setImageResource(R.drawable.ic_play)}
         }
+    }
+
+    companion object{
+        private const val CORNER_RADIUS = 8f
+        private const val MEDIA_TRACK_KEY = "media_track_key"
+
+        fun createArgs(track: Track): Bundle =
+            bundleOf(MEDIA_TRACK_KEY to track)
     }
 }

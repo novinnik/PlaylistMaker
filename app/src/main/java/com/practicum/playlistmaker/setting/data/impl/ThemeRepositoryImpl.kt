@@ -1,19 +1,14 @@
 package com.practicum.playlistmaker.setting.data.impl
 
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.setting.domain.api.ThemeRepository
-import androidx.core.content.edit
+import com.practicum.playlistmaker.Resource
+import com.practicum.playlistmaker.setting.data.storage.ThemePrefStorage
 
-private const val DARK_THEME = "DARK_THEME"
+class ThemeRepositoryImpl(private val storage: ThemePrefStorage) : ThemeRepository{
 
-class ThemeRepositoryImpl(private val sharedPreferences: SharedPreferences) : ThemeRepository{
-    override fun isDarkTheme(): Boolean {
-        return sharedPreferences.getBoolean(DARK_THEME, false)
-    }
-
-    override fun saveTheme(darkTheme: Boolean) {
-        sharedPreferences.edit { putBoolean(DARK_THEME, darkTheme) }
+    override fun isDarkTheme(): Resource<Boolean> {
+        return Resource.Success(storage.getData())
     }
 
     override fun switchTheme(darkTheme: Boolean) {
@@ -24,6 +19,7 @@ class ThemeRepositoryImpl(private val sharedPreferences: SharedPreferences) : Th
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+        storage.storeData(darkTheme)
     }
 
 }

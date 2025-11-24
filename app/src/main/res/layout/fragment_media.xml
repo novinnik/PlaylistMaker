@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_media"
     style="@style/ActivityHeaderStyle"
-    tools:context=".media.ui.MediaActivity">
+    tools:context=".media.ui.MediaFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_activity_media"
-        style="@style/activity_header_button.icon"
+        style="@style/activity_header_button"
         app:title="@string/media"
         />
 
@@ -32,7 +32,6 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 
 </LinearLayout>
 

@@ -22,7 +22,6 @@ class App: Application() {
 
         val themeInteractor: ThemeInteractor by inject()
         themeInteractor.switchTheme(themeInteractor.isDarkTheme())
-
     }
 
 }

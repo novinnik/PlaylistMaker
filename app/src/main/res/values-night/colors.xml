@@ -5,4 +5,5 @@
     <color name="button_media">#40FFFFFF</color>
     <color name="media_text">@color/white</color>
     <color name="media_tablayout">@color/yp_black</color>
+    <color name="color_btn_nav_menu">@color/white</color>
 </resources>
