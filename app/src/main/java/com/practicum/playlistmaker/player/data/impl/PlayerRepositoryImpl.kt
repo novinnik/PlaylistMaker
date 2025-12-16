@@ -5,7 +5,6 @@ import com.practicum.playlistmaker.player.domain.api.PlayerRepository
 
 class PlayerRepositoryImpl(private val player : MediaPlayer): PlayerRepository{
 
-
     override fun playerPrepare(
         trackUrl: String,
         onPreparedListener: () -> Unit,
@@ -32,6 +31,5 @@ class PlayerRepositoryImpl(private val player : MediaPlayer): PlayerRepository{
     override fun getCurrentPosition(): Int {
         return player.currentPosition;
     }
-
 
 }

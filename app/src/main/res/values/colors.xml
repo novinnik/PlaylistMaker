@@ -24,4 +24,7 @@
 
     <color name="media_text">@color/black</color>
     <color name="media_tablayout">@color/white</color>
+
+    <color name="color_selected_item_menu">@color/blue</color>
+    <color name="color_btn_nav_menu">@color/yp_black</color>
 </resources>
