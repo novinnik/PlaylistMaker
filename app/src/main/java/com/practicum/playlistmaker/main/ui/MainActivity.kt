@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -39,14 +40,15 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.playerFragment -> {
-                    binding.bottomNavigationView.visibility = View.GONE
-                }
-                else -> {
-                    binding.bottomNavigationView.visibility = View.VISIBLE
-                }
-            }
+//            when (destination.id) {
+//                R.id.playerFragment -> {
+//                    binding.bottomNavigationView.visibility = View.GONE
+//                }
+//                else -> {
+//                    binding.bottomNavigationView.visibility = View.VISIBLE
+//                }
+//            }
+            binding.bottomNavigationView.isVisible = destination.id != R.id.playerFragment
         }
     }
 }

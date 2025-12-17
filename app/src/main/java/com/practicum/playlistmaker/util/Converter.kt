@@ -16,7 +16,7 @@ object Converter {
     }
 
     fun timeConversion(time: Long?): String {
-        if (time == null) return ""
+        if (time == null) return "00:00"
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
     }
 }

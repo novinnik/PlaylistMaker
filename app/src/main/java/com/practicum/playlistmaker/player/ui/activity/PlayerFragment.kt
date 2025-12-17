@@ -55,11 +55,9 @@ class PlayerFragment: Fragment() {
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
             changeImageButtonPlay(it)
+            binding.playTrackProgress.text = it.timeProgress
         }
 
-        viewModel.observePlayerTimer().observe(viewLifecycleOwner) {
-            binding.playTrackProgress.text = it
-        }
 
         binding.btnPlay.setOnClickListener{
             viewModel.playerControl()
@@ -112,9 +110,9 @@ class PlayerFragment: Fragment() {
 
     private fun changeImageButtonPlay(playerState: PlayerStatus){
         when(playerState){
-            PlayerStatus.PLAY -> binding.btnPlay.setImageResource(R.drawable.ic_pause)
-            PlayerStatus.PAUSE, PlayerStatus.PREPARED -> binding.btnPlay.setImageResource(R.drawable.ic_play)
-            PlayerStatus.DEFAULT -> {binding.btnPlay.setImageResource(R.drawable.ic_play)}
+            is PlayerStatus.Play -> binding.btnPlay.setImageResource(R.drawable.ic_pause)
+            is PlayerStatus.Pause, is PlayerStatus.Prepared -> binding.btnPlay.setImageResource(R.drawable.ic_play)
+            is PlayerStatus.Default -> {binding.btnPlay.setImageResource(R.drawable.ic_play)}
         }
     }
 

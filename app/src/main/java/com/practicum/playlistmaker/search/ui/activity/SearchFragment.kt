@@ -247,6 +247,9 @@ class SearchFragment: Fragment() {
         updateUI(StateSearch.EMPTY)
     }
 
+    fun showMessageToast(message: String?) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
     companion object {
         const val TEXT_EMPTY = ""
         const val CLICK_DEBOUNCE_DELAY = 1000L

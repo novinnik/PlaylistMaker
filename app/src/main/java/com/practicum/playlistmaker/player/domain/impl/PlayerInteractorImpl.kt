@@ -32,4 +32,8 @@ class PlayerInteractorImpl(private val playerRepository: PlayerRepository): Play
     override fun getCurrentPosition(): Int {
         return playerRepository.getCurrentPosition()
     }
+
+    override fun isPlaying(): Boolean {
+        return playerRepository.isPlaying()
+    }
 }

@@ -5,62 +5,52 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
 import com.practicum.playlistmaker.util.Converter.timeConversion
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(private val trackUrl: String,
                       private val playerInteractor: PlayerInteractor): ViewModel() {
 
-    private val playerStateLiveData = MutableLiveData(PlayerStatus.DEFAULT)
+    private var timerJob: Job? = null
+    private val playerStateLiveData = MutableLiveData<PlayerStatus>(PlayerStatus.Default())
     fun observePlayerState(): LiveData<PlayerStatus> = playerStateLiveData
-
-    private val progressTimeLiveDate = MutableLiveData(TIME_ZERO)
-    fun observePlayerTimer(): LiveData<String> = progressTimeLiveDate
-
-    private val playerHandler = Handler(Looper.getMainLooper())
-
-    private val timerRunnable =  Runnable {
-        if (playerStateLiveData.value == PlayerStatus.PLAY) {
-            startTimerUpdate()
-        }
-    }
 
     init {
         playerPrepare()
     }
 
     //работа таймера
-    private fun startTimerUpdate() {
-        val timeProgress  = timeConversion(playerInteractor.getCurrentPosition().toLong())
-        progressTimeLiveDate.postValue(timeProgress)
-
-        playerHandler.postDelayed(timerRunnable, PLAY_DELAY)
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (isActive && playerInteractor.isPlaying()){
+                delay(PLAY_DELAY)
+                playerStateLiveData.postValue(PlayerStatus.Play(getTimeProgress()))
+            }
+        }
     }
 
-    private fun pauseTimer() {
-        //останавливаем обновление текущего процесса, удаляем timerRunnable из handler
-        playerHandler.removeCallbacks(timerRunnable)
-    }
-
-    private fun resetTimer() {
-        //помимо остановки, сбрасываем таймер
-        playerHandler.removeCallbacks(timerRunnable)
-        progressTimeLiveDate.postValue(TIME_ZERO)
+    private fun stopTimer() {
+        timerJob?.cancel()
+        timerJob = null
     }
 
     //работа плеера
     private fun playerPrepare(){
         trackUrl.let{
-
             playerInteractor.playerPrepare(
                 it,
                 {
-                    playerStateLiveData.postValue(PlayerStatus.PREPARED)
+                    playerStateLiveData.postValue(PlayerStatus.Prepared())
                 },
                 {
-                    playerStateLiveData.postValue(PlayerStatus.PREPARED)
-                    resetTimer()
+                    playerStateLiveData.postValue(PlayerStatus.Prepared())
+                    stopTimer()
                 }
             )
         }
@@ -68,33 +58,34 @@ class PlayerViewModel(private val trackUrl: String,
 
     fun playerControl(){
         when (playerStateLiveData.value){
-            PlayerStatus.PLAY -> playerPause()
-            PlayerStatus.PAUSE, PlayerStatus.PREPARED -> playerStart()
-            PlayerStatus.DEFAULT -> {}
-            null -> TODO()
+            is PlayerStatus.Play -> playerPause()
+            is PlayerStatus.Pause, is PlayerStatus.Prepared -> playerStart()
+            else -> {}
         }
     }
 
     private fun playerStart(){
         playerInteractor.playerStart()
-        playerStateLiveData.postValue(PlayerStatus.PLAY)
-        startTimerUpdate()
+        playerStateLiveData.postValue(PlayerStatus.Play(getTimeProgress()))
+        startTimer()
     }
 
     fun playerPause(){
-        pauseTimer()
         playerInteractor.playerPause()
-        playerStateLiveData.postValue(PlayerStatus.PAUSE)
+        playerStateLiveData.postValue(PlayerStatus.Pause(getTimeProgress()))
+        stopTimer()
     }
 
     override fun onCleared() {
         super.onCleared()
         playerInteractor.playerRelease()
-        resetTimer()
+        stopTimer()
     }
 
+    private fun getTimeProgress(): String {
+        return timeConversion(playerInteractor.getCurrentPosition().toLong())
+    }
     companion object{
-        private const val PLAY_DELAY = 500L
-        private const val TIME_ZERO = "00:00"
+        private const val PLAY_DELAY = 300L
     }
 }
