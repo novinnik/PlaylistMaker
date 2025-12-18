@@ -3,8 +3,6 @@ package com.practicum.playlistmaker.search.ui.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -14,8 +12,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
@@ -23,6 +21,7 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.model.TracksState
 import com.practicum.playlistmaker.search.ui.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
+import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
@@ -30,12 +29,11 @@ class SearchFragment: Fragment() {
 
     private var _binding : FragmentSearchBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel by viewModel<SearchViewModel>()
     var isClickAllowed: Boolean = true
     private var simpleTextWatcher: TextWatcher? = null
-    private val searchHandler = Handler(Looper.getMainLooper())
     private var trackList = arrayListOf<Track>()
+    private lateinit var onClickDebounce: (Track) -> Unit
 
     enum class StateSearch {
         CLEAR,
@@ -125,20 +123,24 @@ class SearchFragment: Fragment() {
             false
         }
 
+        onClickDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false){
+            track -> startActivityPlayer(track)
+        }
+
+
         binding.trackSearchRecycler.adapter = TrackAdapter(trackList) { track ->
-            viewModel.addHistory(track)
-            startActivityPlayer(track)
+            onClickDebounce(track)
         }
 
         binding.searchHistoryRecyclerView.adapter = TrackAdapter(historyList) { track ->
-            viewModel.addHistory(track)
-            startActivityPlayer(track)
+            onClickDebounce(track)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        searchHandler.removeCallbacksAndMessages(null)
+        binding.trackSearchRecycler.adapter = null
+        binding.searchHistoryRecyclerView.adapter = null
         simpleTextWatcher.let { binding.inputSearchText.removeTextChangedListener(it) }
         _binding = null
     }
@@ -199,19 +201,11 @@ class SearchFragment: Fragment() {
     }
 
     private fun startActivityPlayer(trackClicked: Track) {
-        if (clickDebounce()) {
-            findNavController().navigate(R.id.action_searchFragment_to_playerFragment,
-                PlayerFragment.createArgs(trackClicked))
-        }
-    }
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            searchHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
+        viewModel.addHistory(trackClicked)
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(trackClicked)
+        )
     }
 
     fun render(state: TracksState) {
@@ -253,7 +247,5 @@ class SearchFragment: Fragment() {
     companion object {
         const val TEXT_EMPTY = ""
         const val CLICK_DEBOUNCE_DELAY = 1000L
-        const val MEDIA_TRACK_KEY = "media_track_key"
-        const val SEARCH_HISTORY_PREF = "search_history_pref"
     }
 }
