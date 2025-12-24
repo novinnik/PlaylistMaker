@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.player.data.impl
 
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.api.PlayerRepository
+import kotlinx.coroutines.Job
 
 class PlayerRepositoryImpl(private val player : MediaPlayer): PlayerRepository{
 
@@ -25,11 +26,15 @@ class PlayerRepositoryImpl(private val player : MediaPlayer): PlayerRepository{
     }
 
     override fun playerRelease() {
-        player.release()
+       player.release()
     }
 
     override fun getCurrentPosition(): Int {
         return player.currentPosition;
+    }
+
+    override fun isPlaying(): Boolean {
+        return player.isPlaying
     }
 
 }

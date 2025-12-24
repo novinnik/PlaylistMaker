@@ -1,28 +1,24 @@
 package com.practicum.playlistmaker.search.ui.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksSearchInteractor
 import com.practicum.playlistmaker.search.domain.models.ResultSearch
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.model.TracksState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
                       private val searchInteractor:TracksSearchInteractor,
                       private val historyInteractor: HistoryInteractor
     ): ViewModel() {
 
-    private val searchHandler = Handler(Looper.getMainLooper())
-
-    private val searchRunnable = Runnable{
-        val newSearchText = lastSearchText?:""
-        searchTrack(newSearchText)
-    }
-
+    private var searchJob: Job? = null
     private var lastSearchText: String? = null
     private var stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
@@ -37,27 +33,6 @@ class SearchViewModel(
         historyLiveData.value = historyInteractor.getHistory()
     }
 
-    private val consumer = object : TracksSearchInteractor.TracksConsumer{
-        override fun consume(tracksSearch: ResultSearch){
-            searchHandler.post {
-                val trackList = arrayListOf<Track>()
-
-                if (tracksSearch.resultCode == 200) {
-
-                    if (tracksSearch.listTracks.isNotEmpty()) {
-                        trackList.addAll(tracksSearch.listTracks)
-                        renderState(TracksState.Content(trackList))
-                    } else {
-                        renderState(TracksState.Empty(true))
-                    }
-                } else {
-                    renderState(TracksState.Error(tracksSearch.resultCode))
-                }
-
-            }
-        }
-    }
-
     fun renderState(state: TracksState){
         stateLiveData.postValue(state)
     }
@@ -66,7 +41,14 @@ class SearchViewModel(
         if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
         }
-        searchInteractor.searchTracks(newSearchText, consumer)
+
+        viewModelScope.launch {
+            searchInteractor
+                .searchTracks(newSearchText)
+                .collect { tracksSearch->
+                    processResult(tracksSearch)
+                }
+        }
     }
 
     fun debounceSearchTrack(changeText: String){
@@ -77,13 +59,34 @@ class SearchViewModel(
 
         this.lastSearchText = changeText
 
-        searchHandler.removeCallbacks(searchRunnable)
-        searchHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchTrack(changeText)
+        }
+    }
+
+    private fun processResult(tracksSearch: ResultSearch) {
+
+        val trackList = arrayListOf<Track>()
+
+        if (tracksSearch.resultCode == 200) {
+
+            if (tracksSearch.listTracks.isNotEmpty()) {
+                trackList.addAll(tracksSearch.listTracks)
+                renderState(TracksState.Content(trackList))
+            } else {
+                renderState(TracksState.Empty(true))
+            }
+        } else {
+            renderState(TracksState.Error(tracksSearch.resultCode))
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
-        searchHandler.removeCallbacks(searchRunnable)
+        searchJob?.cancel()
+        searchJob = null
     }
 
     fun clearHistory() {
@@ -98,7 +101,6 @@ class SearchViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-
     }
 
 }
