@@ -4,20 +4,29 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.media.favorites.domain.db.FavoritesInteractor
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
+import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.Converter.timeConversion
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(private val trackUrl: String,
-                      private val playerInteractor: PlayerInteractor): ViewModel() {
+class PlayerViewModel(
+    private val trackUrl: String,
+    isFavorite: Boolean,
+    private val playerInteractor: PlayerInteractor,
+    private val favoritesInteractor: FavoritesInteractor
+): ViewModel() {
 
     private var timerJob: Job? = null
     private val playerStateLiveData = MutableLiveData<PlayerStatus>(PlayerStatus.Default())
     fun observePlayerState(): LiveData<PlayerStatus> = playerStateLiveData
+
+    private val isFavoriteLiveData = MutableLiveData(isFavorite)
+    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
     init {
         playerPrepare()
@@ -83,6 +92,27 @@ class PlayerViewModel(private val trackUrl: String,
     private fun getTimeProgress(): String {
         return timeConversion(playerInteractor.getCurrentPosition().toLong())
     }
+
+    fun onFavoriteClicked(track: Track){
+        viewModelScope.launch {
+            if (track.isFavorite){
+                favoritesInteractor.deleteTrack(track)
+            } else {
+                favoritesInteractor.addTrack(track)
+            }
+            track.isFavorite = !track.isFavorite
+            isFavoriteLiveData.postValue(!track.isFavorite)
+        }
+    }
+
+//    fun isFavoriteTrack(track: Track) {
+//        viewModelScope.launch {
+//            favoritesInteractor.isFavoritesById(track.id).collect {
+//                isFavoriteLiveData.postValue(it)
+//            }
+//        }
+//    }
+
     companion object{
         private const val PLAY_DELAY = 300L
     }

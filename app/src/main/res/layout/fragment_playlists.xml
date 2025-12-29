@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".media.ui.favorites.FavoritesFragment">
+    tools:context=".media.playlists.PlaylistsFragment">
 
     <Button
         android:id="@+id/media_button_new_playlist"

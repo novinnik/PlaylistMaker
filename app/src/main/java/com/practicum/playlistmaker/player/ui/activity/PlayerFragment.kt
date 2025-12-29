@@ -26,7 +26,8 @@ class PlayerFragment: Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private var trackUrl : String? = null
-    private val viewModel by viewModel<PlayerViewModel>{ parametersOf(trackUrl) }
+    private var isFavorite:Boolean = false
+    private val viewModel by viewModel<PlayerViewModel>{ parametersOf(trackUrl, isFavorite) }
     private var timeProgress = 0L
     private var currentTrack: Track? = null
 
@@ -50,7 +51,6 @@ class PlayerFragment: Fragment() {
             @Suppress("DEPRECATION") // Для старых версий SDK
             requireArguments().getParcelable(MEDIA_TRACK_KEY)
         }
-
         currentTrack?.let { addMediaTrack(it) }
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
@@ -58,9 +58,15 @@ class PlayerFragment: Fragment() {
             binding.playTrackProgress.text = it.timeProgress
         }
 
-
+        viewModel.observeIsFavorite().observe(viewLifecycleOwner){
+            changeImageButtonFavorite(currentTrack?.isFavorite?:false)
+        }
         binding.btnPlay.setOnClickListener{
             viewModel.playerControl()
+        }
+
+        binding.btnFavorite.setOnClickListener {
+            currentTrack?.let {viewModel.onFavoriteClicked(it)}
         }
     }
 
@@ -101,6 +107,8 @@ class PlayerFragment: Fragment() {
         binding.playTrackCountryValue.text = track.country ?: ""
 
         trackUrl = track.previewUrl ?:""
+
+        isFavorite = track.isFavorite
     }
 
     override fun onPause() {
@@ -113,6 +121,14 @@ class PlayerFragment: Fragment() {
             is PlayerStatus.Play -> binding.btnPlay.setImageResource(R.drawable.ic_pause)
             is PlayerStatus.Pause, is PlayerStatus.Prepared -> binding.btnPlay.setImageResource(R.drawable.ic_play)
             is PlayerStatus.Default -> {binding.btnPlay.setImageResource(R.drawable.ic_play)}
+        }
+    }
+
+    private fun changeImageButtonFavorite(isFavorite:Boolean){
+        if (isFavorite){
+            binding.btnFavorite.setImageResource(R.drawable.ic_favorite_like)
+        } else {
+            binding.btnFavorite.setImageResource(R.drawable.ic_favorite)
         }
     }
 

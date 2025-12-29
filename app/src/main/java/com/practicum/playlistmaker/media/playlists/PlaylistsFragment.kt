@@ -1,27 +1,25 @@
-package com.practicum.playlistmaker.media.ui.favorites
+package com.practicum.playlistmaker.media.playlists
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.practicum.playlistmaker.databinding.FragmentFavoritesBinding
-import com.practicum.playlistmaker.media.ui.playlists.PlaylistsViewModel
+import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import org.koin.android.ext.android.inject
-import kotlin.getValue
 
-class FavoritesFragment : Fragment() {
+class PlaylistsFragment : Fragment() {
 
-    private var _binding: FragmentFavoritesBinding? = null
+    private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: FavoritesViewModel by inject()
+    private val viewModel: PlaylistsViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -34,6 +32,6 @@ class FavoritesFragment : Fragment() {
         _binding = null
     }
     companion object {
-        fun newInstance() = FavoritesFragment()
+        fun newInstance() = PlaylistsFragment()
     }
 }

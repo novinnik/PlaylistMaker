@@ -2,8 +2,10 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.google.gson.Gson
 import com.practicum.playlistmaker.data.NetworkClient
+import com.practicum.playlistmaker.data.db.FavoritesDataBase
 import com.practicum.playlistmaker.data.network.ITunesApiService
 import com.practicum.playlistmaker.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.setting.data.storage.ThemePrefStorage
@@ -31,6 +33,12 @@ val dataModule = module{
     factory { MediaPlayer() }
 
     single { ThemePrefStorage(androidContext(), get())}
+
+    single { Room.databaseBuilder(
+        androidContext(),
+        FavoritesDataBase::class.java,
+        "database.db"
+        ).build() }
 }
 
 private const val BASE_URL_ITUNES = "https://itunes.apple.com"
