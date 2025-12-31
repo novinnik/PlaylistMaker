@@ -11,12 +11,12 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.Converter.timeConversion
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val trackUrl: String,
-    isFavorite: Boolean,
     private val playerInteractor: PlayerInteractor,
     private val favoritesInteractor: FavoritesInteractor
 ): ViewModel() {
@@ -25,7 +25,7 @@ class PlayerViewModel(
     private val playerStateLiveData = MutableLiveData<PlayerStatus>(PlayerStatus.Default())
     fun observePlayerState(): LiveData<PlayerStatus> = playerStateLiveData
 
-    private val isFavoriteLiveData = MutableLiveData(isFavorite)
+    private val isFavoriteLiveData = MutableLiveData(false)
     fun observeIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
     init {
@@ -95,23 +95,27 @@ class PlayerViewModel(
 
     fun onFavoriteClicked(track: Track){
         viewModelScope.launch {
-            if (track.isFavorite){
+            val isFavorite = track.isFavorite
+            if (isFavorite){
                 favoritesInteractor.deleteTrack(track)
             } else {
                 favoritesInteractor.addTrack(track)
             }
-            track.isFavorite = !track.isFavorite
-            isFavoriteLiveData.postValue(!track.isFavorite)
+            track.isFavorite = !isFavorite
+            isFavoriteLiveData.postValue(!isFavorite)
         }
     }
 
-//    fun isFavoriteTrack(track: Track) {
-//        viewModelScope.launch {
-//            favoritesInteractor.isFavoritesById(track.id).collect {
-//                isFavoriteLiveData.postValue(it)
-//            }
-//        }
-//    }
+    fun isFavoriteTrack(track: Track) {
+        viewModelScope.launch {
+            favoritesInteractor
+                .isFavoritesById(track.id)
+                .collectLatest { isFavorite ->
+                    track.isFavorite = isFavorite
+                    isFavoriteLiveData.postValue(isFavorite)
+                }
+        }
+    }
 
     companion object{
         private const val PLAY_DELAY = 300L

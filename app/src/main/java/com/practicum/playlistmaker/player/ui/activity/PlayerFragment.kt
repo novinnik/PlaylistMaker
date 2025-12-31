@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -26,8 +27,7 @@ class PlayerFragment: Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private var trackUrl : String? = null
-    private var isFavorite:Boolean = false
-    private val viewModel by viewModel<PlayerViewModel>{ parametersOf(trackUrl, isFavorite) }
+    private val viewModel by viewModel<PlayerViewModel>{ parametersOf(trackUrl) }
     private var timeProgress = 0L
     private var currentTrack: Track? = null
 
@@ -51,7 +51,11 @@ class PlayerFragment: Fragment() {
             @Suppress("DEPRECATION") // Для старых версий SDK
             requireArguments().getParcelable(MEDIA_TRACK_KEY)
         }
-        currentTrack?.let { addMediaTrack(it) }
+
+        currentTrack?.let {
+            addMediaTrack(it)
+            viewModel.isFavoriteTrack(it)
+        }
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
             changeImageButtonPlay(it)
@@ -59,8 +63,9 @@ class PlayerFragment: Fragment() {
         }
 
         viewModel.observeIsFavorite().observe(viewLifecycleOwner){
-            changeImageButtonFavorite(currentTrack?.isFavorite?:false)
+            changeImageButtonFavorite(it)
         }
+
         binding.btnPlay.setOnClickListener{
             viewModel.playerControl()
         }
@@ -107,8 +112,6 @@ class PlayerFragment: Fragment() {
         binding.playTrackCountryValue.text = track.country ?: ""
 
         trackUrl = track.previewUrl ?:""
-
-        isFavorite = track.isFavorite
     }
 
     override fun onPause() {

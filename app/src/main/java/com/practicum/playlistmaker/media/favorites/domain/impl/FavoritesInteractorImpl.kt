@@ -21,4 +21,8 @@ class FavoritesInteractorImpl(
         return favoritesRepository.getFavorites()
     }
 
+    override fun isFavoritesById(trackId: Int): Flow<Boolean> {
+        return favoritesRepository.isFavoritesById(trackId)
+    }
+
 }

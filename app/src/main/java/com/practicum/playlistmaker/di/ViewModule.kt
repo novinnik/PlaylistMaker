@@ -11,8 +11,8 @@ import org.koin.dsl.module
 
 val viewModule = module {
 
-    viewModel {(trackUrl:String, isFavorite: Boolean) ->
-        PlayerViewModel(trackUrl, isFavorite, get(), get())
+    viewModel {(trackUrl:String) ->
+        PlayerViewModel(trackUrl, get(), get())
     }
 
     viewModel {

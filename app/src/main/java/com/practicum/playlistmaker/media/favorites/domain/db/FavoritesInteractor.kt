@@ -7,4 +7,5 @@ interface FavoritesInteractor {
     suspend fun addTrack(track: Track)
     suspend fun deleteTrack(track: Track)
     fun getFavorites(): Flow<List<Track>>
+    fun isFavoritesById(trackId: Int): Flow<Boolean>
 }

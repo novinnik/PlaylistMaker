@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -78,9 +78,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.androidx.room.runtime) //Библиотека Room
-    kapt(libs.androidx.room.compiler) // Kotlin-кодогенератор
     implementation(libs.androidx.room.ktx)//поддержка корутин
-
+    ksp(libs.androidx.room.compiler.v250)// Kotlin-кодогенератор
 
 
 }

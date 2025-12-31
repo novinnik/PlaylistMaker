@@ -20,23 +20,23 @@ val interactorModule = module {
         PlayerInteractorImpl(get())
     }
 
-    single <TracksSearchInteractor> {
+    factory <TracksSearchInteractor> {
         TracksSearchInteractorImpl(get())
     }
 
-    single <HistoryInteractor> {
+    factory <HistoryInteractor> {
         HistoryInteractorImpl(get())
     }
 
-    single <ShareInteractor> {
+    factory <ShareInteractor> {
         ShareInteractorImpl(get())
     }
 
-    single <ThemeInteractor> {
+    factory <ThemeInteractor> {
         ThemeInteractorImpl(get())
     }
 
-    single <FavoritesInteractor>{
+    factory <FavoritesInteractor>{
         FavoritesInteractorImpl(get())
     }
 }
