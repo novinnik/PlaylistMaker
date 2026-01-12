@@ -4,20 +4,29 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.media.favorites.domain.db.FavoritesInteractor
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
+import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.Converter.timeConversion
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(private val trackUrl: String,
-                      private val playerInteractor: PlayerInteractor): ViewModel() {
+class PlayerViewModel(
+    private val trackUrl: String,
+    private val playerInteractor: PlayerInteractor,
+    private val favoritesInteractor: FavoritesInteractor
+): ViewModel() {
 
     private var timerJob: Job? = null
     private val playerStateLiveData = MutableLiveData<PlayerStatus>(PlayerStatus.Default())
     fun observePlayerState(): LiveData<PlayerStatus> = playerStateLiveData
+
+    private val isFavoriteLiveData = MutableLiveData(false)
+    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
     init {
         playerPrepare()
@@ -83,6 +92,31 @@ class PlayerViewModel(private val trackUrl: String,
     private fun getTimeProgress(): String {
         return timeConversion(playerInteractor.getCurrentPosition().toLong())
     }
+
+    fun onFavoriteClicked(track: Track){
+        viewModelScope.launch {
+            val isFavorite = track.isFavorite
+            if (isFavorite){
+                favoritesInteractor.deleteTrack(track)
+            } else {
+                favoritesInteractor.addTrack(track)
+            }
+            track.isFavorite = !isFavorite
+            isFavoriteLiveData.postValue(!isFavorite)
+        }
+    }
+
+    fun isFavoriteTrack(track: Track) {
+        viewModelScope.launch {
+            favoritesInteractor
+                .isFavoritesById(track.id)
+                .collectLatest { isFavorite ->
+                    track.isFavorite = isFavorite
+                    isFavoriteLiveData.postValue(isFavorite)
+                }
+        }
+    }
+
     companion object{
         private const val PLAY_DELAY = 300L
     }

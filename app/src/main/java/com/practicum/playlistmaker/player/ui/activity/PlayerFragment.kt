@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -51,16 +52,26 @@ class PlayerFragment: Fragment() {
             requireArguments().getParcelable(MEDIA_TRACK_KEY)
         }
 
-        currentTrack?.let { addMediaTrack(it) }
+        currentTrack?.let {
+            addMediaTrack(it)
+            viewModel.isFavoriteTrack(it)
+        }
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) {
             changeImageButtonPlay(it)
             binding.playTrackProgress.text = it.timeProgress
         }
 
+        viewModel.observeIsFavorite().observe(viewLifecycleOwner){
+            changeImageButtonFavorite(it)
+        }
 
         binding.btnPlay.setOnClickListener{
             viewModel.playerControl()
+        }
+
+        binding.btnFavorite.setOnClickListener {
+            currentTrack?.let {viewModel.onFavoriteClicked(it)}
         }
     }
 
@@ -113,6 +124,14 @@ class PlayerFragment: Fragment() {
             is PlayerStatus.Play -> binding.btnPlay.setImageResource(R.drawable.ic_pause)
             is PlayerStatus.Pause, is PlayerStatus.Prepared -> binding.btnPlay.setImageResource(R.drawable.ic_play)
             is PlayerStatus.Default -> {binding.btnPlay.setImageResource(R.drawable.ic_play)}
+        }
+    }
+
+    private fun changeImageButtonFavorite(isFavorite:Boolean){
+        if (isFavorite){
+            binding.btnFavorite.setImageResource(R.drawable.ic_favorite_like)
+        } else {
+            binding.btnFavorite.setImageResource(R.drawable.ic_favorite)
         }
     }
 
