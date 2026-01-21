@@ -30,4 +30,17 @@
     <string name="no_media">Your library is empty</string>
     <string name="playlists">Playlists</string>
     <string name="select_tracks">Featured tracks</string>
+    <string name="no_select_image">No image selected</string>
+    <string name="one_track">track</string>
+    <string name="two_four_track">tracks</string>
+    <string name="zero_many_track">tracks</string>
+    <string name="new_name_playlist">Name*</string>
+    <string name="description">Description</string>
+    <string name="create">Create</string>
+    <string name="name_playlist">Playlist name</string>
+    <string name="count_tracks">Number of tracks</string>
+    <string name="question_finisch_creating_a_playlist">Finish creating a playlist?</string>
+    <string name="message_no_save_data">All unsaved data will be lost</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_complete">Complete</string>
 </resources>

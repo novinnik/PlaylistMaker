@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="menu_text_size">22sp</dimen>
-    <dimen name="menu_text_size_16">16sp</dimen>
-    <dimen name="track_size_name">16sp</dimen>
     <dimen name="track_size_art_11">11sp</dimen>
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="track_size_name">16sp</dimen>
+    <dimen name="menu_text_size">22sp</dimen>
+    <dimen name="menu_text_size_16">16sp</dimen>
 
-    <dimen name="menu_icon_padding">8dp</dimen>
-    <dimen name="btn_corner_radius">16dp</dimen>
-    <dimen name="btn_corner_radius_placeholder">54dp</dimen>
-    <dimen name="header_padding">12dp</dimen>
-
-    <dimen name="toolbar_height">56dp</dimen>
-    <dimen name="rounded_search">8dp</dimen>
-
+    <dimen name="padding_0">0dp</dimen>
+    <dimen name="padding_1">1dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
     <dimen name="padding_8">8dp</dimen>
     <dimen name="padding_12">12dp</dimen>
     <dimen name="padding_16">16dp</dimen>
     <dimen name="padding_20">20dp</dimen>
     <dimen name="padding_24">24dp</dimen>
+    <dimen name="padding_32">32dp</dimen>
     <dimen name="padding_36">36dp</dimen>
+    <dimen name="padding_48">48dp</dimen>
+    <dimen name="padding_54">54dp</dimen>
+    <dimen name="padding_160">160dp</dimen>
+
+    <dimen name="menu_icon_padding">@dimen/padding_8</dimen>
+    <dimen name="btn_corner_radius">@dimen/padding_16</dimen>
+    <dimen name="btn_corner_radius_placeholder">@dimen/padding_54</dimen>
+    <dimen name="header_padding">@dimen/padding_12</dimen>
+
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="rounded_search">@dimen/padding_8</dimen>
 
     <dimen name="player_bt_play">100dp</dimen>
     <dimen name="player_barrier_name_header">140dp</dimen>

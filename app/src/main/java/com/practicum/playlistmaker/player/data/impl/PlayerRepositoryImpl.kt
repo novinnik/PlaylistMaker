@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.player.data.impl
 
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.api.PlayerRepository
-import kotlinx.coroutines.Job
 
 class PlayerRepositoryImpl(private val player : MediaPlayer): PlayerRepository{
 
