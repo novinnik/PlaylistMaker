@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:id="@+id/fragment_new_playlist"
+    style="@style/ActivityHeaderStyle"
+    android:fillViewport="true"
+    tools:context=".media.playlists.ui.activity.PlaylistAddFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_new_playlist"
+        style="@style/activity_header_button.icon"
+        app:layout_constraintEnd_toStartOf="@id/right_guideline_new_playlist"
+        app:layout_constraintStart_toStartOf="@id/left_guideline_new_playlist"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/new_playlist" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline_new_playlist"
+        style="@style/player_guideline.vertical"
+        app:layout_constraintGuide_begin="@dimen/padding_16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline_new_playlist"
+        style="@style/player_guideline.vertical"
+        app:layout_constraintGuide_end="@dimen/padding_16" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/new_playlist_image"
+        android:layout_width="@dimen/padding_0"
+        android:layout_height="@dimen/padding_0"
+        android:layout_marginStart="@dimen/padding_8"
+        android:layout_marginTop="@dimen/padding_24"
+        android:layout_marginEnd="@dimen/padding_8"
+        android:background="@drawable/add_photo_rectangle"
+        android:clickable="true"
+        android:contentDescription="@string/player_image_album_description"
+        android:scaleType="center"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/right_guideline_new_playlist"
+        app:layout_constraintStart_toStartOf="@id/left_guideline_new_playlist"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_new_playlist"
+        app:srcCompat="@drawable/ic_add_photo" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/title_new_playlist_layout"
+        style="@style/text_input_layout_playlist_color"
+
+        android:layout_marginTop="@dimen/padding_32"
+        app:layout_constraintEnd_toStartOf="@id/right_guideline_new_playlist"
+        app:layout_constraintStart_toStartOf="@id/left_guideline_new_playlist"
+        app:layout_constraintTop_toBottomOf="@id/new_playlist_image"
+        android:hint="@string/new_name_playlist">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/title_new_playlist"
+            style="@style/text_input_edittext_playlist_color"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/description_new_playlist_layout"
+        style="@style/text_input_layout_playlist_color"
+
+        android:layout_marginTop="@dimen/padding_16"
+        app:layout_constraintEnd_toStartOf="@id/right_guideline_new_playlist"
+        app:layout_constraintStart_toStartOf="@id/left_guideline_new_playlist"
+        app:layout_constraintTop_toBottomOf="@id/title_new_playlist_layout"
+        android:hint="@string/description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/description_new_playlist"
+            style="@style/text_input_edittext_playlist_color"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/new_playlist_create"
+        style="@style/button_create_new_playlist_color"
+
+        android:layout_marginBottom="@dimen/padding_32"
+        android:text="@string/create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/right_guideline_new_playlist"
+        app:layout_constraintStart_toStartOf="@id/left_guideline_new_playlist" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

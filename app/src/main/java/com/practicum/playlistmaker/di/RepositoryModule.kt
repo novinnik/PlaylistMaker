@@ -1,9 +1,14 @@
 package com.practicum.playlistmaker.di
 
-import com.practicum.playlistmaker.data.db.FavoritesDataBase
-import com.practicum.playlistmaker.data.db.FavoritesDbConverter
+import com.practicum.playlistmaker.data.db.AppDataBase
+import com.practicum.playlistmaker.data.db.DbConverter
+import com.practicum.playlistmaker.data.db.TrackInPlaylistsDbConverter
 import com.practicum.playlistmaker.media.favorites.data.FavoritesRepositoryImpl
 import com.practicum.playlistmaker.media.favorites.domain.db.FavoritesRepository
+import com.practicum.playlistmaker.media.playlists.data.PlaylistsRepositoryImpl
+import com.practicum.playlistmaker.media.playlists.data.WorkingWithFilesRepositoryImpl
+import com.practicum.playlistmaker.media.playlists.domain.db.PlaylistsRepository
+import com.practicum.playlistmaker.media.playlists.domain.db.WorkingWithFilesRepository
 import com.practicum.playlistmaker.player.data.impl.PlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.api.PlayerRepository
 import com.practicum.playlistmaker.search.data.impl.HistoryRepositoryImpl
@@ -39,13 +44,31 @@ val repositoryModule = module {
         ThemeRepositoryImpl(get())
     }
 
-    factory { FavoritesDbConverter() }
+    factory { DbConverter(get()) }
+
+    factory { TrackInPlaylistsDbConverter() }
 
     single {
-        get<FavoritesDataBase>().favoritesDao()
+        get<AppDataBase>().favoritesDao()
+    }
+
+    single{
+        get<AppDataBase>().playlistsDao()
+    }
+
+    single{
+        get<AppDataBase>().trackInPlaylistsDao()
     }
 
     factory <FavoritesRepository> {
         FavoritesRepositoryImpl(get(), get())
+    }
+
+    factory <PlaylistsRepository>{
+        PlaylistsRepositoryImpl(get(), get(), get(), get())
+    }
+
+    factory <WorkingWithFilesRepository>{
+        WorkingWithFilesRepositoryImpl(androidContext())
     }
 }

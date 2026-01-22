@@ -5,7 +5,7 @@
     </style>
 
     <style name="ActivityHeaderStyle"  parent="linear_vertical_match">
-        <item name="android:background">@color/yp_black</item>
+        <item name="android:background">@color/base_color_theme</item>
     </style>
 
     <style name="activity_header_button.icon">

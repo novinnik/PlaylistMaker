@@ -3,11 +3,12 @@
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!--Base color Primary-->
         <!--основной цвет приложения-->
-        <item name="colorPrimary">@color/white</item>
+<!--        <item name="colorPrimary">@color/white</item>-->
         <!--оттенок цвета бренда-->
-        <item name="colorPrimaryVariant">@color/yp_black</item>
+        <item name="colorPrimaryVariant">@color/light_grey</item>
         <!--цвет элементов переднего плана-->
-        <item name="colorOnPrimary">@color/light_grey</item>
+<!--        <item name="colorOnPrimary">@color/light_grey</item>-->
+        <item name="colorOnPrimary">@color/yp_black</item>
 
         <!--Base color Secondary-->
         <item name="colorSecondary">@color/background_forms</item>
@@ -16,7 +17,10 @@
 
         <!--StatusBar-->
         <!-- <item name="android:statusBarColor"></item>-->
+        <item name="colorOnBackground">@color/white</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
+
+
 </resources>

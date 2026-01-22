@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    Цвет активного состояния (т.е. в фокусе)-->
+    <item
+        android:state_focused="true"
+        android:color="@color/selector_layout_playlist"/>
+
+<!--    Цвет обычного состояния-->
+    <item android:color="@color/selector_layout_playlist"/>
+</selector>

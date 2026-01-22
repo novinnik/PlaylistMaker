@@ -3,7 +3,7 @@
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!--Base color Primary-->
         <!--основной цвет приложения-->
-        <item name="colorPrimary">@color/yp_black</item>
+<!--        <item name="colorPrimary">@color/yp_black</item>-->
         <!--оттенок цвета бренда-->
         <item name="colorPrimaryVariant">@color/white</item>
         <!--цвет элементов переднего плана-->

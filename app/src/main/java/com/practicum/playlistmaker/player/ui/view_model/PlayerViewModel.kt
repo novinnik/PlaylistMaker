@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.media.favorites.domain.db.FavoritesInteractor
+import com.practicum.playlistmaker.media.playlists.domain.db.PlaylistsInteractor
+import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
+import com.practicum.playlistmaker.media.playlists.model.PlaylistState
 import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -18,7 +21,8 @@ import kotlinx.coroutines.launch
 class PlayerViewModel(
     private val trackUrl: String,
     private val playerInteractor: PlayerInteractor,
-    private val favoritesInteractor: FavoritesInteractor
+    private val favoritesInteractor: FavoritesInteractor,
+    private val playlistsInteractor: PlaylistsInteractor
 ): ViewModel() {
 
     private var timerJob: Job? = null
@@ -28,8 +32,12 @@ class PlayerViewModel(
     private val isFavoriteLiveData = MutableLiveData(false)
     fun observeIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
 
+    private val playlistsStateLiveData = MutableLiveData< PlaylistState>(PlaylistState.Loading)
+    fun observePlaylistsState(): LiveData<PlaylistState> = playlistsStateLiveData
+
     init {
         playerPrepare()
+        getPlaylists()
     }
 
     //работа таймера
@@ -115,6 +123,41 @@ class PlayerViewModel(
                     isFavoriteLiveData.postValue(isFavorite)
                 }
         }
+    }
+
+    //плейлисты
+    fun getPlaylists(){
+       playlistsStateLiveData.postValue(PlaylistState.Loading)
+        viewModelScope.launch {
+            playlistsInteractor
+                .getPlaylists()
+                .collect { value ->
+                    processResultPlaylists(value)
+                }
+        }
+    }
+
+    private fun processResultPlaylists(playlist: List<Playlist>){
+        if (playlist.isNotEmpty()){
+            renderStatePlaylists(PlaylistState.Content(playlist))
+        } else {
+            renderStatePlaylists(PlaylistState.Empty)
+        }
+    }
+    private fun renderStatePlaylists(state: PlaylistState){
+        playlistsStateLiveData.postValue(state)
+    }
+
+    fun trackInPlaylist(playlist: Playlist, track: Track): Boolean{
+        return track.id in playlist.listIds
+    }
+
+    fun addTrackToPlaylist(playlist: Playlist, track: Track){
+        viewModelScope.launch {
+            playlistsInteractor.addTrackToPlaylist(playlist, track)
+            playlistsInteractor.addTrack(track)
+        }
+        getPlaylists()
     }
 
     companion object{

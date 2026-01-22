@@ -27,4 +27,13 @@
 
     <color name="color_selected_item_menu">@color/blue</color>
     <color name="color_btn_nav_menu">@color/yp_black</color>
+
+    <color name="add_playlist_name">@color/grey</color>
+
+    <color name="text_layout_playlist">@color/yp_black</color>
+    <color name="selector_layout_playlist">@color/grey</color>
+    <color name="text_view_playlist">@color/yp_black</color>
+
+    <color name="base_color_theme">@color/white</color>
+
 </resources>

@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.media.favorites.data
-
-import com.practicum.playlistmaker.data.db.FavoritesDbConverter
+import com.practicum.playlistmaker.data.db.DbConverter
 import com.practicum.playlistmaker.data.db.dao.FavoritesDao
 import com.practicum.playlistmaker.data.db.entity.FavoritesEntity
 import com.practicum.playlistmaker.media.favorites.domain.db.FavoritesRepository
@@ -11,15 +10,15 @@ import kotlin.collections.map
 
 class FavoritesRepositoryImpl(
     private val favoritesDao: FavoritesDao,
-    private val favoritesDbConverter: FavoritesDbConverter
+    private val dbConverter: DbConverter
 ) : FavoritesRepository {
 
     override suspend fun addTrack(track: Track) {
-        favoritesDao.insertTrack(favoritesDbConverter.map(track))
+        favoritesDao.insertTrack(dbConverter.map(track))
     }
 
     override suspend fun deleteTrack(track: Track) {
-        favoritesDao.deleteTrack(favoritesDbConverter.map((track)))
+        favoritesDao.deleteTrack(dbConverter.map((track)))
     }
 
     override fun getFavorites(): Flow<List<Track>> = flow {
@@ -28,7 +27,7 @@ class FavoritesRepositoryImpl(
     }
 
     private fun convertFromTrack(favorites: List<FavoritesEntity>):List<Track>{
-        return favorites.map { favorite -> favoritesDbConverter.map(favorite)}
+        return favorites.map { favorite -> dbConverter.map(favorite)}
     }
 
     override fun isFavoritesById(trackId: Int): Flow<Boolean> = flow {

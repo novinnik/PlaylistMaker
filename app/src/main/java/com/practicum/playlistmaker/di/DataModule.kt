@@ -5,7 +5,7 @@ import android.media.MediaPlayer
 import androidx.room.Room
 import com.google.gson.Gson
 import com.practicum.playlistmaker.data.NetworkClient
-import com.practicum.playlistmaker.data.db.FavoritesDataBase
+import com.practicum.playlistmaker.data.db.AppDataBase
 import com.practicum.playlistmaker.data.network.ITunesApiService
 import com.practicum.playlistmaker.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.setting.data.storage.ThemePrefStorage
@@ -36,7 +36,7 @@ val dataModule = module{
 
     single { Room.databaseBuilder(
         androidContext(),
-        FavoritesDataBase::class.java,
+        AppDataBase::class.java,
         "database.db"
         ).build() }
 }
