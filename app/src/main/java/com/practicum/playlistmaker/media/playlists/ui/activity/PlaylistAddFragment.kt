@@ -115,7 +115,9 @@ class PlaylistAddFragment : Fragment() {
 
     private fun saveNewPlayList() {
         viewModel.saveNewPlaylist(imageFileUri, title, description)
-        showMessageToast("Плейлист $title успешно создан")
+        val textPlaylist = requireContext().resources.getString(R.string.playlist)
+        val textOk = requireContext().resources.getString(R.string.ok_create_small).lowercase()
+        showMessageToast("$textPlaylist $title $textOk")
     }
 
     private fun backPressed(){
@@ -127,7 +129,7 @@ class PlaylistAddFragment : Fragment() {
     }
 
     private fun showDialog(){
-        MaterialAlertDialogBuilder(requireContext(),R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog_Dialog)
+        MaterialAlertDialogBuilder(requireContext(),)
             .setTitle(requireContext().resources.getString(R.string.question_finisch_creating_a_playlist))
             .setMessage(requireContext().resources.getString(R.string.message_no_save_data))
             .setNeutralButton(requireContext().resources.getString(R.string.button_cancel)){dialog, which ->

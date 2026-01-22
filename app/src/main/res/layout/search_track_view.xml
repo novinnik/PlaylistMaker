@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/padding_8">
 
         <TextView
             android:id="@+id/track_name"

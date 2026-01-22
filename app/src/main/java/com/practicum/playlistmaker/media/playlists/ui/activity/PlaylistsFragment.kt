@@ -48,6 +48,7 @@ class PlaylistsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.playlistsRecycler.adapter = null
         _binding = null
     }
 

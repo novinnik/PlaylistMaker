@@ -28,6 +28,7 @@
     <string name="new_playlist">New playlist</string>
     <string name="no_playlist">"You haven't created\n any playlists."</string>
     <string name="no_media">Your library is empty</string>
+    <string name="playlist">Playlist</string>
     <string name="playlists">Playlists</string>
     <string name="select_tracks">Featured tracks</string>
     <string name="no_select_image">No image selected</string>
@@ -43,4 +44,5 @@
     <string name="message_no_save_data">All unsaved data will be lost</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_complete">Complete</string>
+    <string name="ok_create_small">successfully created</string>
 </resources>
