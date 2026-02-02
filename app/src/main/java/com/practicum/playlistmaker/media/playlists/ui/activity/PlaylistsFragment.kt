@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
@@ -13,6 +14,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.media.playlists.model.PlaylistState
 import com.practicum.playlistmaker.media.playlists.ui.PlaylistAdapter
+import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
+import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.util.debounce
 import org.koin.android.ext.android.inject
 
 class PlaylistsFragment : Fragment() {
@@ -21,12 +25,15 @@ class PlaylistsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: PlaylistsViewModel by inject()
+    private var playlist = arrayListOf<Playlist>()
+    private lateinit var onClickDebounce: (Playlist) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -35,7 +42,7 @@ class PlaylistsFragment : Fragment() {
 
         binding.playlistsRecycler.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        viewModel.fillData()
+//        viewModel.fillData()
 
         viewModel.observeState().observe(viewLifecycleOwner){
             render(it)
@@ -44,6 +51,19 @@ class PlaylistsFragment : Fragment() {
         binding.mediaButtonNewPlaylist.setOnClickListener {
             addNewPlayList()
         }
+
+        onClickDebounce = debounce<Playlist>(CLICK_DEBOUNCE_DELAY,viewLifecycleOwner.lifecycleScope, false){playlist ->
+            startActivityInfo(playlist)
+        }
+
+        binding.playlistsRecycler.adapter = PlaylistAdapter(playlist){value->
+            onClickDebounce(value)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fillData()
     }
 
     override fun onDestroyView() {
@@ -54,7 +74,8 @@ class PlaylistsFragment : Fragment() {
 
     private fun addNewPlayList(){
         findNavController().navigate(
-            R.id.action_mediaFragment_to_playlistAddFragment
+            R.id.action_mediaFragment_to_playlistAddFragment,
+            PlaylistAddFragment.createArgs(-1)
         )
     }
 
@@ -75,14 +96,17 @@ class PlaylistsFragment : Fragment() {
         }
     }
 
-    fun showContent(playlist: List<Playlist>) {
+    fun showContent(playlisContentt: List<Playlist>) {
         binding.apply {
             playlistsProgressBar.visibility = View.GONE
             errorImageFragmentPlaylists.visibility = View.GONE
             errorMessageFragmentPlaylists.visibility = View.GONE
             playlistsRecycler.visibility = View.VISIBLE
-            binding.playlistsRecycler.adapter = PlaylistAdapter(playlist)
+//            binding.playlistsRecycler.adapter = PlaylistAdapter(playlist)
         }
+        playlist.clear()
+        playlist.addAll(playlisContentt)
+        binding.playlistsRecycler.adapter?.notifyDataSetChanged()
     }
 
     fun showEmpty() {
@@ -92,9 +116,19 @@ class PlaylistsFragment : Fragment() {
             errorMessageFragmentPlaylists.visibility = View.VISIBLE
             playlistsRecycler.visibility = View.GONE
         }
+        playlist.clear()
+        binding.playlistsRecycler.adapter?.notifyDataSetChanged()
     }
 
+    private fun startActivityInfo(playlistClicked: Playlist) {
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_playlistInfoFragment,
+            PlaylistInfoFragment.createArgs(playlistClicked.id)
+        )
+    }
     companion object {
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+      //  private const val PLAYLIST_ID = "playlist_id"
         fun newInstance() = PlaylistsFragment()
     }
 }

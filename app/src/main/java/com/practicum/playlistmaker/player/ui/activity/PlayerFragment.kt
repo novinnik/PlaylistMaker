@@ -17,8 +17,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
+import com.practicum.playlistmaker.main.ui.MainActivity
 import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.media.playlists.model.PlaylistState
+import com.practicum.playlistmaker.media.playlists.ui.activity.PlaylistAddFragment
 import com.practicum.playlistmaker.player.ui.bottom_sheet.PlaylistBottomSheetAdapter
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
@@ -40,6 +42,8 @@ class PlayerFragment: Fragment() {
     private var currentTrack: Track? = null
     lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var onClickDebouncePlaylist: (Playlist) -> Unit
+    private val playlist = mutableListOf<Playlist>()
+    private lateinit var playlistAdapter: PlaylistBottomSheetAdapter
 
 
     override fun onCreateView(
@@ -183,7 +187,9 @@ class PlayerFragment: Fragment() {
         }
 
         binding.playlistBtmAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_playerFragment_to_playlistAddFragment)
+            findNavController().navigate(
+                R.id.action_playerFragment_to_playlistAddFragment,
+                PlaylistAddFragment.createArgs(-1))
         }
 
         binding.playlistBtmRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -195,6 +201,12 @@ class PlayerFragment: Fragment() {
             { value ->
                 addTrackToPlaylist(value)
             }
+        playlistAdapter = PlaylistBottomSheetAdapter(playlist) {newPlaylist ->
+            onClickDebouncePlaylist(newPlaylist)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN}
+        binding.playlistBtmRecyclerView.adapter = playlistAdapter
+
+
 
     }
 
@@ -225,8 +237,12 @@ class PlayerFragment: Fragment() {
 
         binding.playlistBtmRecyclerView.visibility = View.VISIBLE
 
-        binding.playlistBtmRecyclerView.adapter =
-            PlaylistBottomSheetAdapter(newPlaylists) {newPlaylist -> onClickDebouncePlaylist(newPlaylist)}
+        this.playlist.clear()
+        this.playlist.addAll(newPlaylists)
+        playlistAdapter.notifyDataSetChanged()
+
+//        binding.playlistBtmRecyclerView.adapter =
+//            PlaylistBottomSheetAdapter(newPlaylists) {newPlaylist -> onClickDebouncePlaylist(newPlaylist)}
 
     }
 

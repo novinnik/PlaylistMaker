@@ -21,6 +21,11 @@ object Converter {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(time)
     }
 
+    fun timeConversionMM(time: Long?): String {
+        if (time == null) return "00"
+        return SimpleDateFormat("mm", Locale.getDefault()).format(time)
+    }
+
     fun getNoun(number: Int, one: String, two: String, five: String): String {
         var n = abs(number)
         n %= 100
