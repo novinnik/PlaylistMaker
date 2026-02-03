@@ -6,8 +6,8 @@ import com.practicum.playlistmaker.media.playlists.domain.db.WorkingWithFilesRep
 
 class WorkingWithFileInteractorImpl(
     private val workingWithFilesRepository: WorkingWithFilesRepository): WorkingWithFilesInteractor {
-    override fun saveFileImage(uri: Uri?): Uri? {
-        return workingWithFilesRepository.saveFileImage(uri)
+    override fun saveFileImage(uri: Uri?, oldUri: Uri?): Uri {
+        return workingWithFilesRepository.saveFileImage(uri, oldUri)
     }
 
 }

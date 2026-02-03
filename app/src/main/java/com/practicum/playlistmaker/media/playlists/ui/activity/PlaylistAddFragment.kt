@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -28,10 +29,8 @@ class PlaylistAddFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<PlaylistAddViewModel>()
     private var imageFileUri: Uri? = null
-    private var titleTextWatcher: TextWatcher? = null
-    private var descriptionTextWatcher: TextWatcher? = null
-    private var title = ""
-    private var description = ""
+    private var playlistId: Int = -1
+    private var thisNewPlaylist = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,18 +45,29 @@ class PlaylistAddFragment : Fragment() {
 
         binding.toolbarNewPlaylist.setOnClickListener { backPressed() }
 
-        binding.newPlaylistCreate.isEnabled = false
+        playlistId = requireArguments().getInt(PLAYLIST_ID)?:-1
+
+        if (playlistId > 0 ) {
+            viewModel.setDataPlaylist(playlistId)
+            thisNewPlaylist = false
+        }
+
+        binding.newPlaylistCreate.isEnabled = !thisNewPlaylist //false
+
+        if (thisNewPlaylist){
+            binding.newPlaylistCreate.text = requireContext().resources.getString(R.string.create)
+            binding.toolbarNewPlaylist.title = requireContext().resources.getString(R.string.new_playlist)
+        } else {
+            binding.newPlaylistCreate.text = requireContext().resources.getString(R.string.save)
+            binding.toolbarNewPlaylist.title = requireContext().resources.getString(R.string.edit)
+        }
 
         val pickImage =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()){ uri ->
                 if (uri != null){
-                    imageFileUri = uri
-                    Glide.with(this)
-                        .load(uri)
-                        .placeholder(R.drawable.ic_placeholder)
-                        .centerCrop()
-                        .transform(RoundedCorners(dpToPx(CORNER_RADIUS, requireContext())))
-                        .into(binding.newPlaylistImage)
+                    viewModel.onImageSelected(uri)
+                    loadImage(uri)
+
                 } else {
                     showMessageToast(requireContext().resources.getString(R.string.no_select_image))
                 }
@@ -67,32 +77,36 @@ class PlaylistAddFragment : Fragment() {
             pickImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-
-        titleTextWatcher = object : TextWatcher {
+        val titleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                title = s?.toString() ?: ""
+                val title = s?.toString() ?: ""
+                viewModel.onTitleChanged(title)
                 if (title.isEmpty()) {binding.newPlaylistCreate.isEnabled = false} else {binding.newPlaylistCreate.isEnabled = true}
-
             }
         }
 
-        titleTextWatcher?.let { binding.titleNewPlaylist.addTextChangedListener(it) }
+        titleTextWatcher.let { binding.titleNewPlaylist.addTextChangedListener(it) }
 
-        descriptionTextWatcher = object : TextWatcher {
+        val descriptionTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                description = s?.toString() ?: ""
+                viewModel.onDescriptionChanged(s?.toString() ?: "")
             }
         }
 
-        descriptionTextWatcher?.let { binding.descriptionNewPlaylist.addTextChangedListener(it) }
+        descriptionTextWatcher.let { binding.descriptionNewPlaylist.addTextChangedListener(it) }
 
         binding.newPlaylistCreate.setOnClickListener {
-            saveNewPlayList()
-            findNavController().navigateUp()
+            if (thisNewPlaylist) {
+                saveNewPlayList()
+                findNavController().navigateUp()
+            } else {
+                updatePlaylist()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         }
 
         //проверка перед выходом (слушатель для обработки нажатия кнопки Back)
@@ -101,6 +115,19 @@ class PlaylistAddFragment : Fragment() {
                     backPressed()
                 }
             })
+
+        viewModel.stateFormLiveData.observe(viewLifecycleOwner){state ->
+            if (binding.titleNewPlaylist.text.toString() != state.title){
+                binding.titleNewPlaylist.setText(state.title)
+            }
+
+            if (binding.descriptionNewPlaylist.text.toString() != state.description){
+                binding.descriptionNewPlaylist.setText(state.description)
+            }
+
+            loadImage(state.uriCover)
+
+        }
 
     }
 
@@ -114,21 +141,29 @@ class PlaylistAddFragment : Fragment() {
     }
 
     private fun saveNewPlayList() {
-        viewModel.saveNewPlaylist(imageFileUri, title, description)
+        val title = binding.titleNewPlaylist.text.toString()
+        viewModel.saveNewPlaylist()
         val textPlaylist = requireContext().resources.getString(R.string.playlist)
         val textOk = requireContext().resources.getString(R.string.ok_create_small).lowercase()
         showMessageToast("$textPlaylist $title $textOk")
     }
 
+    private fun updatePlaylist(){
+        viewModel.updatePlaylist()
+    }
+
     private fun backPressed(){
-        if (binding.titleNewPlaylist.text.toString().isNotEmpty() || description.isNotEmpty() || imageFileUri != null){
-            showDialog()
+        if (binding.titleNewPlaylist.text.toString().isNotEmpty() || binding.descriptionNewPlaylist.text.toString().isNotEmpty() || imageFileUri != null){
+            when (thisNewPlaylist){
+                true -> showDialogCreate()
+                else -> findNavController().navigateUp()
+            }
         } else {
             findNavController().navigateUp()
         }
     }
 
-    private fun showDialog(){
+    private fun showDialogCreate(){
         MaterialAlertDialogBuilder(requireContext(),)
             .setTitle(requireContext().resources.getString(R.string.question_finisch_creating_a_playlist))
             .setMessage(requireContext().resources.getString(R.string.message_no_save_data))
@@ -140,9 +175,23 @@ class PlaylistAddFragment : Fragment() {
             .show()
     }
 
+    private fun loadImage(uri: Uri?){
+        imageFileUri = uri
+        if (uri != null){
+        Glide.with(this)
+            .load(uri)
+            .placeholder(R.drawable.ic_placeholder_info)
+            .centerCrop()
+            .transform(RoundedCorners(dpToPx(CORNER_RADIUS, requireContext())))
+            .into(binding.newPlaylistImage)
+        }
+    }
+
     companion object {
         private const val CORNER_RADIUS = 8f
+        private const val PLAYLIST_ID = "playlist_id"
         fun newInstance() = PlaylistAddFragment()
-
+        fun createArgs(playlistId: Int): Bundle =
+            bundleOf(PLAYLIST_ID to playlistId)
     }
 }
