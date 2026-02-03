@@ -29,10 +29,24 @@
     <string name="player_btn_add_description">Добавить в плейлист</string>
     <string name="player_btn_like_description">Добавить в избранное</string>
     <string name="time_zero" translatable="false">00:00</string>
-<!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
     <string name="new_playlist">Новый плейлист</string>
     <string name="no_playlist">Вы не создали \nни одного плейлиста</string>
     <string name="no_media">Ваша медиатека пуста</string>
+    <string name="playlist">Плейлист</string>
     <string name="playlists">Плейлисты</string>
     <string name="select_tracks">Избранные треки</string>
+    <string name="no_select_image">Изображение не выбрано</string>
+    <string name="one_track">трек</string>
+    <string name="two_four_track">трека</string>
+    <string name="zero_many_track">треков</string>
+    <string name="new_name_playlist">Название*</string>
+    <string name="description">Описание</string>
+    <string name="create">Создать</string>
+    <string name="name_playlist">Название плейлиста</string>
+    <string name="count_tracks">Количество треков</string>
+    <string name="question_finisch_creating_a_playlist">Завершить создание плейлиста?</string>
+    <string name="message_no_save_data">Все несохраненные данные будут потеряны</string>
+    <string name="button_cancel">Отмена</string>
+    <string name="button_complete">Завершить</string>
+    <string name="ok_create_small">успешно создан</string>
 </resources>

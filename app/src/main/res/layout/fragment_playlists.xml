@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".media.playlists.PlaylistsFragment">
+    tools:context=".media.playlists.ui.activity.PlaylistsFragment">
 
     <Button
         android:id="@+id/media_button_new_playlist"
@@ -18,7 +18,7 @@
         android:id="@+id/error_image_fragment_playlists"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="@dimen/padding_48"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:visibility="visible"
@@ -39,5 +39,20 @@
         android:fontFamily="@font/ys_display_medium"
         android:textFontWeight="400"
         />
+
+    <ProgressBar
+        android:id="@+id/playlists_progress_bar"
+        style="@style/style_progress_bar"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlists_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/padding_16"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+         />
 
 </LinearLayout>
