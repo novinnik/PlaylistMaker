@@ -49,4 +49,19 @@
     <string name="button_cancel">Отмена</string>
     <string name="button_complete">Завершить</string>
     <string name="ok_create_small">успешно создан</string>
+    <string name="share">Поделиться</string>
+    <string name="menu">Меню</string>
+    <string name="save">Сохранить</string>
+    <string name="edit">Редактировать</string>
+    <string name="no_tracks_in_playlist">В этом плейлисте нет треков</string>
+    <string name="edit_info">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="string_no">Нет</string>
+    <string name="string_yes">Да</string>
+    <string name="question_delete_track">Хотите удалить трек</string>
+    <string name="question_delete_playlist">Хотите удалить плейлист</string>
+    <string name="one_minute">минута</string>
+    <string name="two_minutes">минуты</string>
+    <string name="zero_many_minutes">минут</string>
+    <string name="no_tracks_in_playlist_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
 </resources>

@@ -17,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PlayerViewModel(
     private val trackUrl: String,
@@ -154,10 +155,12 @@ class PlayerViewModel(
 
     fun addTrackToPlaylist(playlist: Playlist, track: Track){
         viewModelScope.launch {
-            playlistsInteractor.addTrackToPlaylist(playlist, track)
-            playlistsInteractor.addTrack(track)
+            runBlocking {
+                playlistsInteractor.addTrackToPlaylist(playlist, track)
+                playlistsInteractor.addTrack(track)
+            }
+            getPlaylists()
         }
-        getPlaylists()
     }
 
     companion object{

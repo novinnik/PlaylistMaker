@@ -11,11 +11,14 @@ import com.practicum.playlistmaker.data.db.entity.TrackInPlaylistsEntity
 interface TrackInPlaylistsDao {
 
     @Insert(entity = TrackInPlaylistsEntity::class, onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTrack(playlistTrackEntity: TrackInPlaylistsEntity)
+    suspend fun insertTrack(trackInPlaylistsEntity: TrackInPlaylistsEntity)
 
     @Delete(entity = TrackInPlaylistsEntity::class)
-    suspend fun deleteTrack(playlistTrackEntity: TrackInPlaylistsEntity)
+    suspend fun deleteTrack(trackInPlaylistsEntity: TrackInPlaylistsEntity)
 
     @Query("SELECT * FROM playlist_track_entity WHERE trackId = :id")
     suspend fun getTrackById(id:Int): TrackInPlaylistsEntity
+
+    @Query("DELETE FROM playlist_track_entity WHERE trackId = :id")
+    suspend fun deleteTrackById(id:Int)
 }

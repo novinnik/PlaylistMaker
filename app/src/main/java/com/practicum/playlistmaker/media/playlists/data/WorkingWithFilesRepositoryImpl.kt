@@ -5,16 +5,19 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import androidx.core.net.toUri
 import com.practicum.playlistmaker.media.playlists.domain.db.WorkingWithFilesRepository
 import java.io.File
 import java.io.FileOutputStream
 
 class WorkingWithFilesRepositoryImpl(private val context: Context): WorkingWithFilesRepository {
 
-    override fun saveFileImage(uri: Uri?): Uri? {
+    override fun saveFileImage(uri: Uri?, oldUri: Uri?): Uri {
 
-        if (uri == null) return null
+        if (uri == null) return Uri.EMPTY
+
+        if (oldUri != null) {
+            if (uri.toString() == oldUri.toString()) return oldUri
+        }
 
         //создаем экземпляр класса File, который указывает на нужный каталог
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum_playlist")
@@ -41,6 +44,6 @@ class WorkingWithFilesRepositoryImpl(private val context: Context): WorkingWithF
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
 
-        return file.toUri()
+        return Uri.fromFile(file)
     }
 }
