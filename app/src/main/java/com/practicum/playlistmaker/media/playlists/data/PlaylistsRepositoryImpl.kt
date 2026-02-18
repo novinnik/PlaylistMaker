@@ -11,6 +11,7 @@ import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 
 class PlaylistsRepositoryImpl(
     private val playlistsDao: PlaylistsDao,
@@ -44,13 +45,17 @@ class PlaylistsRepositoryImpl(
         playlist: Playlist,
         track: Track
     ) {
-        playlistsDao.updatePlaylists(
+        playlistsDao.updateTracksInPlaylist(
             playlist.id,
-            playlistsDbConverter.map(playlist.listIds + listOf(track.id)),
+            playlistsDbConverter.map(listOf(track.id) + playlist.listIds),
             playlist.listIds.size + 1
         )
     }
 
+    override fun getPlaylistById(id: Int): Flow<Playlist> = flow {
+        val playlistEntity = playlistsDao.getPlaylistById(id)
+        emit(playlistsDbConverter.map(playlistEntity))
+    }
     override suspend fun addTrack(track: Track) {
         trackInPlaylistDao.insertTrack(trackInPlaylistsConverter.map(track))
     }
@@ -61,10 +66,86 @@ class PlaylistsRepositoryImpl(
 
     override fun getTrackById(id: Int): Flow<Track?> = flow {
         val track = trackInPlaylistDao.getTrackById(id)
-        emit(convertromEntityToTrackF(track))
+        emit(convertFromEntityToTracks(track))
     }
 
-    private fun convertromEntityToTrackF(trackEntity: TrackInPlaylistsEntity): Track {
+    override suspend fun getTracksInPlaylist(playlist: Playlist): List<Track> {
+        val listTracks = mutableListOf<Track>()
+
+        for (id in playlist.listIds){
+            val track = convertFromEntityToTracks(trackInPlaylistDao.getTrackById(id))
+            listTracks.add(track)
+        }
+        return listTracks
+    }
+
+    private fun convertFromEntityToTracks(trackEntity: TrackInPlaylistsEntity): Track {
         return trackInPlaylistsConverter.map(trackEntity)
+    }
+
+    override suspend fun deleteTrackFromPlaylist(idTrack: Int, idPlaylist: Int) {
+
+        val playlist: Playlist = playlistsDbConverter.map(playlistsDao.getPlaylistById(idPlaylist))
+
+        //перебрать спиское треков и удалить нужный, сминусовать количество
+        val listIds: List<Int> = playlist.listIds - idTrack
+
+        playlistsDao.updateTracksInPlaylist(
+            idPlaylist,
+            playlistsDbConverter.map(listIds),
+            listIds.size
+        )
+
+        val isTrackUsed = trackInAllPlaylist(idTrack)
+
+        //удалить трек если нет в плейлистах
+        if (!isTrackUsed) {
+            trackInPlaylistDao.deleteTrackById(idTrack)
+        }
+    }
+
+    private suspend fun trackInAllPlaylist(idTrack: Int): Boolean{
+        val allPlaylist = convertFromPlaylist(playlistsDao.getPlaylists())
+
+        var isTrackUsed = false
+        allPlaylist.map { playlist ->
+            val trackIds = playlist.listIds
+            if (trackIds.contains(idTrack)){
+                isTrackUsed = true
+            }
+        }
+        return isTrackUsed
+    }
+
+    override suspend fun deletePlaylistById(id: Int) {
+        runBlocking {
+            val playlist = playlistsDbConverter.map(playlistsDao.getPlaylistById(id))
+            val listIds = playlist.listIds
+
+            playlistsDao.deletePlaylistById(id)
+
+            if (listIds.isNotEmpty()) cleanupTracks(listIds)
+        }
+        
+    }
+
+    private suspend fun cleanupTracks(idTracks: List<Int>) {
+        idTracks.forEach {id ->
+            val isTrackUsed = trackInAllPlaylist(id)
+
+            if (!isTrackUsed) {
+                trackInPlaylistDao.deleteTrackById(id)
+            }
+        }
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        val image = playlist.image?.toString() ?: ""
+        playlistsDao.updateItemsInPlaylist(
+            playlist.id,
+            image,
+            playlist.title,
+            playlist.description
+        )
     }
 }
