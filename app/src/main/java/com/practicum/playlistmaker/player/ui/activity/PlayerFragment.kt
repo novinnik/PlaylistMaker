@@ -143,7 +143,11 @@ class PlayerFragment: Fragment() {
     }
 
     private fun changeImageButtonPlay(playerState: PlayerStatus){
-        binding.btnPlay.isPlaying = playerState is PlayerStatus.Play
+        when(playerState){
+            is PlayerStatus.Play -> binding.btnPlay.setImageResource(R.drawable.ic_pause)
+            is PlayerStatus.Pause, is PlayerStatus.Prepared -> binding.btnPlay.setImageResource(R.drawable.ic_play)
+            is PlayerStatus.Default -> {binding.btnPlay.setImageResource(R.drawable.ic_play)}
+        }
     }
 
     private fun changeImageButtonFavorite(isFavorite:Boolean){
