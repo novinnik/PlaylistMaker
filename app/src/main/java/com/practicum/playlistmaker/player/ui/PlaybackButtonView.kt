@@ -23,13 +23,7 @@ class PlaybackButtonView @JvmOverloads constructor(
     private val imagePauseBitmap: Bitmap?
     private var imageRect = RectF(0f, 0f, 0f, 0f)
 
-    var isPlaying: Boolean = false
-        //установить / сменить значение
-        set (value) {
-            if (field == value) return
-            field = value
-            invalidate() //перерисовать
-        }
+    private var isPlaying: Boolean = false
 
     init {
         context.theme.obtainStyledAttributes(
@@ -72,6 +66,7 @@ class PlaybackButtonView @JvmOverloads constructor(
         when(event?.action){
             MotionEvent.ACTION_DOWN -> return true
             MotionEvent.ACTION_UP -> {
+                changedState()
                 performClick()
                 return true
             }
@@ -86,5 +81,15 @@ class PlaybackButtonView @JvmOverloads constructor(
         return true
     }
 
+    private fun changedState() {
+        isPlaying = !isPlaying
+        invalidate()
+    }
 
+    fun setPlaying(isPlay: Boolean) {
+        if (isPlaying != isPlay) {
+            isPlaying = isPlay
+            invalidate()
+        }
+    }
 }
