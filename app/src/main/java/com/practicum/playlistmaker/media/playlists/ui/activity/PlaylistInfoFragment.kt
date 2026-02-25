@@ -13,7 +13,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,35 +30,33 @@ import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-
 class PlaylistInfoFragment : Fragment() {
 
     private var _binding: FragmentPlaylistInfoBinding? = null
     private val binding get() = _binding!!
     private var playlistId: Int = -1
-    private val viewModel by viewModel<PlaylistInfoViewModel> {parametersOf(playlistId)}
+    private val viewModel by viewModel<PlaylistInfoViewModel> { parametersOf(playlistId) }
 
     private lateinit var btmSheetTracks: BottomSheetBehavior<LinearLayout>
     private lateinit var btmSheetMenu: BottomSheetBehavior<LinearLayout>
     private lateinit var onClickDebounceTrack: (Track) -> Unit
     private lateinit var onClickLongDebounceTrack: (Track) -> Unit
-    private var trackAdapter: TrackInPlaylistAdapter? = null
-    private var tracksList = arrayListOf<Track>()
+    private lateinit var trackAdapter: TrackInPlaylistAdapter
+    private var tracksList = mutableListOf<Track>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentPlaylistInfoBinding.inflate(inflater, container, false)
-
-        playlistId = requireArguments().getInt(PLAYLIST_ID)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        playlistId = requireArguments().getInt(PLAYLIST_ID)
+        viewModel.updateState()
 
         binding.btnBack.setOnClickListener { findNavController().navigateUp() }
 
@@ -69,32 +66,33 @@ class PlaylistInfoFragment : Fragment() {
             }
         })
 
-//        playlistId = requireArguments().getInt(PLAYLIST_ID)?:-1
-//
- //       viewModel.loadViewPlaylist(playlistId)
-
-        onClickDebounceTrack = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false){
-                track -> startActivityPlayer(track)
+        onClickDebounceTrack = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            startActivityPlayer(track)
         }
 
-        onClickLongDebounceTrack = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false){
-                track -> deleteTrack(track)
+        onClickLongDebounceTrack = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            deleteTrack(track)
         }
 
         trackAdapter = TrackInPlaylistAdapter(
             tracksList,
-            {track -> onClickDebounceTrack(track)},
-            {track -> onClickLongDebounceTrack(track)}
+            { track -> onClickDebounceTrack(track) },
+            { track -> onClickLongDebounceTrack(track) }
         )
 
         binding.btmRecyclerView.adapter = trackAdapter
 
-        viewModel.statePlaylistLiveData().observe(viewLifecycleOwner){it ->
-            renderPlaylist(it)
-        }
-
-        viewModel.stateTracksLiveData().observe(viewLifecycleOwner){it ->
-            renderTracks(it)
+        viewModel.observeState().observe(viewLifecycleOwner) { it ->
+            renderPlaylist(it.playlist)
+            renderTracks(it.tracks)
         }
 
         initPeekHeightBottomSheet()
@@ -103,20 +101,19 @@ class PlaylistInfoFragment : Fragment() {
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        btmSheetTracks.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+        btmSheetTracks.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when(newState){
-                    BottomSheetBehavior.STATE_HIDDEN ->{
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.overlay.visibility = View.GONE
                     }
+
                     else -> binding.overlay.visibility = View.VISIBLE
                 }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-//                if (slideOffset > 0) {
-//                    binding.overlay.alpha = slideOffset
-//                }
+
                 val top = bottomSheet.top
                 val screenHeight = resources.displayMetrics.heightPixels
                 val alpha = 1f - (top.toFloat() / screenHeight.toFloat())
@@ -130,12 +127,13 @@ class PlaylistInfoFragment : Fragment() {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        btmSheetMenu.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+        btmSheetMenu.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when(newState){
-                    BottomSheetBehavior.STATE_HIDDEN ->{
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.overlay.visibility = View.GONE
                     }
+
                     else -> binding.overlay.visibility = View.VISIBLE
                 }
             }
@@ -176,12 +174,18 @@ class PlaylistInfoFragment : Fragment() {
         }
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateState()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
-    private fun renderPlaylist(playlist: Playlist){
+    private fun renderPlaylist(playlist: Playlist) {
         loadImage(playlist.image)
 
         binding.apply {
@@ -194,20 +198,19 @@ class PlaylistInfoFragment : Fragment() {
 
     }
 
-    private fun renderTracks(tracks: List<Track>){
-       binding.apply {
-           allTimeTracks.text = getStringAllTimes(tracks)
-           tvNoTracks.isVisible = !tracks.isNotEmpty()
-           btmRecyclerView.isVisible = tracks.isNotEmpty()
-       }
-
+    private fun renderTracks(tracks: List<Track>) {
+        binding.apply {
+            allTimeTracks.text = getStringAllTimes(tracks)
+            tvNoTracks.isVisible = !tracks.isNotEmpty()
+            btmRecyclerView.isVisible = tracks.isNotEmpty()
+        }
         tracksList.clear()
         tracksList.addAll(tracks)
-        trackAdapter?.notifyDataSetChanged()
+        trackAdapter.updateData(tracks)
     }
 
-    private fun loadImage(uri: Uri?){
-        if (uri != null){
+    private fun loadImage(uri: Uri?) {
+        if (uri != null) {
             Glide.with(requireContext())
                 .load(uri)
                 .placeholder(R.drawable.ic_placeholder)
@@ -224,8 +227,8 @@ class PlaylistInfoFragment : Fragment() {
 
     private fun getStringAllTimes(tracks: List<Track>): String {
         var allTime = 0L
-        for (track in tracks){
-            allTime += track.trackTime?:0L
+        for (track in tracks) {
+            allTime += track.trackTime ?: 0L
         }
         val allTimeText = timeConversionMM(allTime)
 
@@ -233,16 +236,19 @@ class PlaylistInfoFragment : Fragment() {
             allTimeText.toInt(),
             requireContext().resources.getString(R.string.one_minute),
             requireContext().resources.getString(R.string.two_minutes),
-            requireContext().resources.getString(R.string.zero_many_minutes))
+            requireContext().resources.getString(R.string.zero_many_minutes)
+        )
 
         return "$allTimeText $countStr"
     }
-    private fun countString(count: Int): String{
+
+    private fun countString(count: Int): String {
         val countStr = getNoun(
             count,
             requireContext().resources.getString(R.string.one_track),
             requireContext().resources.getString(R.string.two_four_track),
-            requireContext().resources.getString(R.string.zero_many_track))
+            requireContext().resources.getString(R.string.zero_many_track)
+        )
 
         return "$count $countStr"
     }
@@ -254,67 +260,65 @@ class PlaylistInfoFragment : Fragment() {
         )
     }
 
-    private fun startActivityEditPlaylist(){
+    private fun startActivityEditPlaylist() {
         findNavController().navigate(
             R.id.action_playlistInfoFragment_to_playlistAddFragment,
             PlaylistAddFragment.createArgs(playlistId)
         )
     }
-    private fun deleteTrack(track: Track){
+
+    private fun deleteTrack(track: Track) {
         val questionMessage = requireContext().resources.getString(R.string.question_delete_track)
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.dialogTheme)
             .setMessage("$questionMessage?")
-            .setNegativeButton(requireContext().resources.getString(R.string.string_no)){dialog, which -> }
-            .setPositiveButton(requireContext().resources.getString(R.string.string_yes)){dialog, which ->
+            .setNegativeButton(requireContext().resources.getString(R.string.string_no)) { dialog, which -> }
+            .setPositiveButton(requireContext().resources.getString(R.string.string_yes)) { dialog, which ->
                 viewModel.deleteTrackFromPlaylist(track.id)
             }.show()
     }
 
-    private fun deletePlaylist(){
+    private fun deletePlaylist() {
 
-            binding.overlay.visibility = View.VISIBLE
-//            val namePlaylist = binding.playlistName.text
-            val questionMessage = requireContext().resources.getString(R.string.question_delete_playlist)
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(requireContext().resources.getString(R.string.delete_playlist))
-                .setMessage("$questionMessage \"${binding.playlistName.text}\"?")
-                .setNegativeButton(requireContext().resources.getString(R.string.string_no)){dialog, which ->
-                    binding.overlay.visibility = View.GONE
-                }
-                .setPositiveButton(requireContext().resources.getString(R.string.string_yes)){dialog, which ->
-                    viewModel.deletePlaylist()
-                    findNavController().navigateUp()
-                }.show()
-
+        binding.overlay.visibility = View.VISIBLE
+        val questionMessage =
+            requireContext().resources.getString(R.string.question_delete_playlist)
+        MaterialAlertDialogBuilder(requireContext(), R.style.dialogTheme)
+            .setTitle(requireContext().resources.getString(R.string.delete_playlist))
+            .setMessage("$questionMessage \"${binding.playlistName.text}\"?")
+            .setNegativeButton(requireContext().resources.getString(R.string.string_no)) { dialog, which ->
+                binding.overlay.visibility = View.GONE
+            }
+            .setPositiveButton(requireContext().resources.getString(R.string.string_yes)) { dialog, which ->
+                viewModel.deletePlaylist()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }.show()
     }
 
-    private fun getMessageShare(): String{
-        //val playlist = viewModel.statePlaylistLiveData.value
-        var message = ""
-       // if (playlist != null) {
-        message = binding.playlistName.text.toString() + "\n" +
+    private fun getMessageShare(): String {
+        var message = binding.playlistName.text.toString() + "\n" +
                 binding.playlistDescription.text.toString() + "\n" +
                 tracksList.count() + " " +
-                getNoun(tracksList.count(),
+                getNoun(
+                    tracksList.count(),
                     requireContext().resources.getString(R.string.one_track),
                     requireContext().resources.getString(R.string.two_four_track),
-                    requireContext().resources.getString(R.string.zero_many_track)) + "\n"
-       tracksList.forEachIndexed { index, track ->
+                    requireContext().resources.getString(R.string.zero_many_track)
+                ) + "\n"
+        tracksList.forEachIndexed { index, track ->
             val number = index + 1
 
-           message += "${number}. ${track.artistName} - ${track.trackName} (${timeConversion(track.trackTime)})"
+            message += "${number}. ${track.artistName} - ${track.trackName} (${timeConversion(track.trackTime)})"
 
-           if (index < tracksList.size -1) message += "\n"
+            if (index < tracksList.size - 1) message += "\n"
         }
-       // }
         return message
     }
 
-    private fun showMessageShare(){
-        if (!tracksList.isEmpty()){
+    private fun showMessageShare() {
+        if (!tracksList.isEmpty()) {
             viewModel.sharePlaylist(getMessageShare())
         } else {
-            showMessageToast("В этом плейлисте нет списка треков, \n которым можно поделиться")
+            showMessageToast(requireContext().resources.getString(R.string.no_tracks_in_playlist_share))
         }
     }
 
@@ -322,27 +326,21 @@ class PlaylistInfoFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
-    private fun initPeekHeightBottomSheet(){
-
-//        btmSheetMenu = BottomSheetBehavior.from(binding.btmSheetBtnMenu).apply {
-//            state = BottomSheetBehavior.STATE_HIDDEN
-//        }
-        val btmSheetBehavior = binding.btmSheetTracks//btmSheetTracks
-        val content = binding.content
+    private fun initPeekHeightBottomSheet() {
+        val btmSheetBehavior = binding.btmSheetTracks
+        val content = binding.buttonGroup
         btmSheetBehavior.post {
             val behavior = BottomSheetBehavior.from(btmSheetBehavior)
             val rootHeight = binding.root.height
             val contentBottom = content.bottom
             val peekHeight = rootHeight - contentBottom
             behavior.peekHeight = peekHeight
-         //   behavior.isHideable = false
-          //  behavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
 
     companion object {
         private const val PLAYLIST_ID = "playlist_id"
-        const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val CLICK_DEBOUNCE_DELAY = 500L
         fun createArgs(playlistId: Int): Bundle =
             bundleOf(PLAYLIST_ID to playlistId)
     }

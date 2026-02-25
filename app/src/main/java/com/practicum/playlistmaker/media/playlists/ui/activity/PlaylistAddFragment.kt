@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -32,11 +31,6 @@ class PlaylistAddFragment : Fragment() {
     private var imageFileUri: Uri? = null
     private var playlistId: Int = -1
     private var thisNewPlaylist = true
-
-//    private var titleTextWatcher: TextWatcher? = null
-//    private var descriptionTextWatcher: TextWatcher? = null
-//    private var title = ""
-//    private var description = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -148,8 +142,6 @@ class PlaylistAddFragment : Fragment() {
 
     private fun saveNewPlayList() {
         val title = binding.titleNewPlaylist.text.toString()
-       // val description = binding.descriptionNewPlaylist.text.toString()
-       // viewModel.saveNewPlaylist(imageFileUri, title, description)
         viewModel.saveNewPlaylist()
         val textPlaylist = requireContext().resources.getString(R.string.playlist)
         val textOk = requireContext().resources.getString(R.string.ok_create_small).lowercase()

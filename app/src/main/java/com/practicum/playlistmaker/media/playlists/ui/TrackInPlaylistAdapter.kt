@@ -6,7 +6,7 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.ui.TrackViewHolder
 
 class TrackInPlaylistAdapter(
-    private val tracks: List<Track>,
+    private var tracks: List<Track>,
     private val onTrackClick: (Track) -> Unit,
     private val onTrackLongClick: (Track) -> Unit
 ): RecyclerView.Adapter<TrackViewHolder>() {
@@ -29,5 +29,10 @@ class TrackInPlaylistAdapter(
 
     override fun getItemCount(): Int {
         return tracks.size
+    }
+
+    fun updateData(newTracks: List<Track>){
+        tracks = newTracks
+        notifyDataSetChanged()
     }
 }

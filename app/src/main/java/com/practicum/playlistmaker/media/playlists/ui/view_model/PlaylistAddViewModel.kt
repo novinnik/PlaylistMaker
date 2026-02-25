@@ -2,8 +2,6 @@ package com.practicum.playlistmaker.media.playlists.ui.view_model
 
 import androidx.lifecycle.ViewModel
 import android.net.Uri
-import android.text.TextWatcher
-import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -16,17 +14,15 @@ import kotlinx.coroutines.launch
 class PlaylistAddViewModel(
     private val playlistsInteractor: PlaylistsInteractor,
     private val workingWithFilesInteractor: WorkingWithFilesInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private val stateForm = MutableLiveData<FormPlaylistState>()
-    val stateFormLiveData : LiveData<FormPlaylistState> = stateForm
+    val stateFormLiveData: LiveData<FormPlaylistState> = stateForm
 
     private val statePlaylist = MutableLiveData<Playlist>()
     val statePlaylistLiveData: LiveData<Playlist> = statePlaylist
 
     private var imageFileUri: Uri? = null
-    //private var titleTextWatcher: TextWatcher? = null
-    //private var descriptionTextWatcher: TextWatcher? = null
     private var title = ""
     private var description = ""
     private var currentId: Int = -1
@@ -35,57 +31,46 @@ class PlaylistAddViewModel(
         updateStateForm()
     }
 
-    private fun updateStateForm(){
+    private fun updateStateForm() {
         stateForm.value = FormPlaylistState(imageFileUri, title, description)
     }
 
-    fun onTitleChanged(value: String){
+    fun onTitleChanged(value: String) {
         title = value
         updateStateForm()
     }
 
-    fun onDescriptionChanged(value: String){
+    fun onDescriptionChanged(value: String) {
         description = value
         updateStateForm()
     }
 
-    fun onImageSelected(value: Uri?){
-        if (value != null){
+    fun onImageSelected(value: Uri?) {
+        if (value != null) {
             imageFileUri = value
             updateStateForm()
         }
     }
-//    fun saveNewPlaylist(uri: Uri?, title: String, description: String){
-//        viewModelScope.launch {
-//        val savePathFile = workingWithFilesInteractor.saveFileImage(uri)
-//        val newPlaylist = Playlist(
-//            image = savePathFile,
-//            title = title,
-//            description = description,
-//            listIds = listOf(),
-//            count = 0)
-//        //savePlaylist(newPlaylist)
-//            playlistsInteractor.addPlaylist(newPlaylist)
-//        }
-//    }
-fun saveNewPlaylist(){
-    viewModelScope.launch {
-        val savePathFile = workingWithFilesInteractor.saveFileImage(imageFileUri, Uri.EMPTY)
-        val playlist = Playlist(
-            image = savePathFile,
-            title = title,
-            description = description,
-            listIds = listOf(),
-            count = 0)
-        playlistsInteractor.addPlaylist(playlist)
-    }
-}
 
-    fun updatePlaylist(){
+    fun saveNewPlaylist() {
+        viewModelScope.launch {
+            val savePathFile = workingWithFilesInteractor.saveFileImage(imageFileUri, Uri.EMPTY)
+            val playlist = Playlist(
+                image = savePathFile,
+                title = title,
+                description = description,
+                listIds = listOf(),
+                count = 0
+            )
+            playlistsInteractor.addPlaylist(playlist)
+        }
+    }
+
+    fun updatePlaylist() {
         viewModelScope.launch {
             val imagePlaylist = statePlaylistLiveData.getValue()?.image
 
-            val savePathFile  = workingWithFilesInteractor.saveFileImage(imageFileUri, imagePlaylist)
+            val savePathFile = workingWithFilesInteractor.saveFileImage(imageFileUri, imagePlaylist)
 
             val tracksIds = statePlaylistLiveData.getValue()?.listIds ?: listOf()
 
@@ -95,35 +80,25 @@ fun saveNewPlaylist(){
                 title = title,
                 description = description,
                 listIds = tracksIds,
-                count = tracksIds.count())
+                count = tracksIds.count()
+            )
             playlistsInteractor.updatePlaylist(newPlaylist)
         }
     }
 
-    fun setDataPlaylist(id: Int){
+    fun setDataPlaylist(id: Int) {
         currentId = id
         viewModelScope.launch {
-            playlistsInteractor.getPlaylistById(id).collect {
-                    playlist ->
+            playlistsInteractor.getPlaylistById(id).collect { playlist ->
                 statePlaylist.postValue(playlist)
                 title = playlist.title
                 description = playlist.description
-                if (playlist.image!=null){
+                if (playlist.image != null) {
                     imageFileUri = playlist.image
                 }
                 updateStateForm()
             }
         }
     }
-//    private fun savePlaylist(playlist: Playlist){
-//        viewModelScope.launch {
-//            playlistsInteractor.addPlaylist(playlist)
-//        }
-//    }
-
-//    private fun deleteImage(){
-//        val file = File(imageFileUri)
-//        file.delete()
-//    }
 
 }

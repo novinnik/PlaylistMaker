@@ -57,9 +57,8 @@
             android:layout_marginTop="@dimen/padding_24"
             android:ellipsize="end"
             android:fontFamily="@font/ys_display_bold"
-
             android:maxLines="1"
-            android:textColor="@color/placeholder_image_color_primary"
+            android:textColor="@color/yp_black"
             android:textFontWeight="700"
             android:textSize="@dimen/text_size_24"
             app:layout_constraintEnd_toStartOf="@id/right_guideline_playlist"
@@ -76,7 +75,7 @@
             android:fontFamily="@font/ys_display_regular"
 
             android:maxLines="1"
-            android:textColor="@color/placeholder_image_color_primary"
+            android:textColor="@color/yp_black"
             android:textFontWeight="400"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/right_guideline_playlist"
@@ -101,7 +100,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/ys_display_regular"
                 android:maxLines="1"
-                android:textColor="@color/placeholder_image_color_primary"
+                android:textColor="@color/yp_black"
                 android:textFontWeight="400"
                 android:textSize="18sp"
                 tools:text="300 минут" />
@@ -114,7 +113,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/ys_display_regular"
                 android:maxLines="1"
-                android:textColor="@color/placeholder_image_color_primary"
+                android:textColor="@color/yp_black"
                 android:textFontWeight="400"
                 android:textSize="18sp"
                 app:drawableStartCompat="@drawable/ic_comm"
@@ -123,6 +122,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/button_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_16"
@@ -169,7 +169,7 @@
         android:background="@drawable/bottom_sheep_background"
         android:orientation="vertical"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="150dp"
+        app:behavior_peekHeight="266dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -264,56 +264,17 @@
 
         <Button
             android:id="@+id/share_playlist"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/white"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="@dimen/padding_16"
-            android:textAllCaps="false"
-            android:fontFamily="@font/ys_display_regular"
-            android:textColor="@color/yp_black"
-            android:textFontWeight="400"
-            android:textSize="@dimen/menu_text_size_16"
-            app:icon="@drawable/ic_arrow_forward"
-            app:iconGravity="end"
-            app:iconTint="@color/grey"
-            app:iconPadding="@dimen/menu_icon_padding"
+            style="@style/button_btmsheet_info_playlist"
             android:text="@string/share"/>
 
         <Button
             android:id="@+id/edit_info_playlist"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/white"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="@dimen/padding_16"
-            android:textAllCaps="false"
-            android:fontFamily="@font/ys_display_regular"
-            android:textColor="@color/yp_black"
-            android:textFontWeight="400"
-            android:textSize="@dimen/menu_text_size_16"
-            app:icon="@drawable/ic_arrow_forward"
-            app:iconGravity="end"
-            app:iconTint="@color/grey"
-            app:iconPadding="@dimen/menu_icon_padding"
+            style="@style/button_btmsheet_info_playlist"
             android:text="@string/edit_info"/>
 
         <Button
             android:id="@+id/delete_playlist"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/white"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="@dimen/padding_16"
-            android:fontFamily="@font/ys_display_regular"
-            android:textAllCaps="false"
-            android:textColor="@color/yp_black"
-            android:textFontWeight="400"
-            android:textSize="@dimen/menu_text_size_16"
-            app:icon="@drawable/ic_arrow_forward"
-            app:iconGravity="end"
-            app:iconTint="@color/grey"
-            app:iconPadding="@dimen/menu_icon_padding"
+            style="@style/button_btmsheet_info_playlist"
             android:text="@string/delete_playlist"/>
     </LinearLayout>
 

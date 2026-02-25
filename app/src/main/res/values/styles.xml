@@ -331,10 +331,21 @@
     </style>
 
     <style name="MyThemeOverlay.MaterialComponents.MaterialAlertDialog.Dialog" parent="@style/MyThemeOverlay.MaterialComponents.MaterialAlertDialog.Dialog" tools:ignore="ResourceCycle">
-        <item name="cornerFamily">cut</item>
-        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
-        <item name="buttonBarNeutralButtonStyle">@style/ButtonStyle</item>
+        <!--        <item name="cornerFamily">cut</item>-->
+        <!--        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>-->
+        <!--        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>-->
+        <!--        <item name="buttonBarNeutralButtonStyle">@style/ButtonStyle</item>-->
+    </style>
+
+    <style name="dialogTheme" parent="@style/MyThemeOverlay.MaterialComponents.MaterialAlertDialog.Dialog" tools:ignore="ResourceCycle">
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/yp_black</item>
+        <item name="colorPrimary">@color/blue</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextAppearance.MaterialComponents.Body2</item>
+    </style>
+
+    <style name="BodyTextAppearance.MaterialComponents.Body2" parent="@style/TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/yp_black</item>
     </style>
 
     <style name="ButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -393,6 +404,24 @@
 
     <style name="text_view_playlist_color" parent="text_style_playlist">
         <item name="android:textColor">@color/text_view_playlist</item>
+    </style>
+
+    <style name="button_btmsheet_info_playlist">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/padding_16</item>
+        <item name="android:backgroundTint">@color/base_color_theme</item>
+        <item name="android:textColor">@color/text_view_playlist</item>
+        <item name="android:textSize">@dimen/menu_text_size_16</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+<!--        <item name="iconTint">@color/selector_layout_playlist</item>-->
+<!--        <item name="iconGravity">end</item>-->
+<!--        <item name="iconPadding">@dimen/menu_icon_padding</item>-->
+<!--        <item name="icon">@drawable/ic_arrow_forward</item>-->
     </style>
 
 </resources>

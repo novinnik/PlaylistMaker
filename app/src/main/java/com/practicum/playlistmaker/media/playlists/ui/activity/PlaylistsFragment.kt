@@ -14,8 +14,6 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.media.playlists.model.PlaylistState
 import com.practicum.playlistmaker.media.playlists.ui.PlaylistAdapter
-import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
-import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.debounce
 import org.koin.android.ext.android.inject
 
@@ -41,8 +39,6 @@ class PlaylistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.playlistsRecycler.layoutManager = GridLayoutManager(requireContext(), 2)
-
-//        viewModel.fillData()
 
         viewModel.observeState().observe(viewLifecycleOwner){
             render(it)
@@ -102,7 +98,6 @@ class PlaylistsFragment : Fragment() {
             errorImageFragmentPlaylists.visibility = View.GONE
             errorMessageFragmentPlaylists.visibility = View.GONE
             playlistsRecycler.visibility = View.VISIBLE
-//            binding.playlistsRecycler.adapter = PlaylistAdapter(playlist)
         }
         playlist.clear()
         playlist.addAll(playlisContentt)
@@ -128,7 +123,6 @@ class PlaylistsFragment : Fragment() {
     }
     companion object {
         const val CLICK_DEBOUNCE_DELAY = 1000L
-      //  private const val PLAYLIST_ID = "playlist_id"
         fun newInstance() = PlaylistsFragment()
     }
 }

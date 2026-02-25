@@ -11,6 +11,7 @@ import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 
 class PlaylistsRepositoryImpl(
     private val playlistsDao: PlaylistsDao,
@@ -46,7 +47,7 @@ class PlaylistsRepositoryImpl(
     ) {
         playlistsDao.updateTracksInPlaylist(
             playlist.id,
-            playlistsDbConverter.map(playlist.listIds + listOf(track.id)),
+            playlistsDbConverter.map(listOf(track.id) + playlist.listIds),
             playlist.listIds.size + 1
         )
     }
@@ -117,23 +118,25 @@ class PlaylistsRepositoryImpl(
     }
 
     override suspend fun deletePlaylistById(id: Int) {
-        //Получим текущие id треков
-        val playlist: Playlist = playlistsDbConverter.map(playlistsDao.getPlaylistById(id))
-        val listIds: List<Int> = playlist.listIds
+        runBlocking {
+            val playlist = playlistsDbConverter.map(playlistsDao.getPlaylistById(id))
+            val listIds = playlist.listIds
 
-        //удаляем нужный плейлист
-        playlistsDao.deletePlaylistById(id)
+            playlistsDao.deletePlaylistById(id)
 
-        //переюираем плейлисты и проверяем чтобы треки не участвовали в других
-        listIds.map {
+            if (listIds.isNotEmpty()) cleanupTracks(listIds)
+        }
+
+    }
+
+    private suspend fun cleanupTracks(idTracks: List<Int>) {
+        idTracks.forEach {id ->
             val isTrackUsed = trackInAllPlaylist(id)
 
-            //удалить трек если нет в плейлистах
             if (!isTrackUsed) {
                 trackInPlaylistDao.deleteTrackById(id)
             }
         }
-
     }
 
     override suspend fun updatePlaylist(playlist: Playlist) {

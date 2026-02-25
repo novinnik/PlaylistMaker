@@ -59,4 +59,5 @@
     <string name="one_minute">minute</string>
     <string name="two_minutes">minutes</string>
     <string name="zero_many_minutes">minutes</string>
+    <string name="no_tracks_in_playlist_share">This playlist does not contain a list of tracks, that can be shared</string>
 </resources>
