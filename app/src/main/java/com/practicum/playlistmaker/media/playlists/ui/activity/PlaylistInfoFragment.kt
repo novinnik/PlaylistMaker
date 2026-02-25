@@ -42,7 +42,7 @@ class PlaylistInfoFragment : Fragment() {
     private lateinit var onClickDebounceTrack: (Track) -> Unit
     private lateinit var onClickLongDebounceTrack: (Track) -> Unit
     private lateinit var trackAdapter: TrackInPlaylistAdapter
-    private var tracksList = arrayListOf<Track>()
+    private var tracksList = mutableListOf<Track>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
