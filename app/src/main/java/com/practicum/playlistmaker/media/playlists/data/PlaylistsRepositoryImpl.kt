@@ -126,7 +126,7 @@ class PlaylistsRepositoryImpl(
 
             if (listIds.isNotEmpty()) cleanupTracks(listIds)
         }
-        
+
     }
 
     private suspend fun cleanupTracks(idTracks: List<Int>) {

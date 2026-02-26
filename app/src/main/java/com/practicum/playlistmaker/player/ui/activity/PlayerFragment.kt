@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
+import com.practicum.playlistmaker.main.ui.MainActivity
 import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.media.playlists.model.PlaylistState
 import com.practicum.playlistmaker.media.playlists.ui.activity.PlaylistAddFragment
