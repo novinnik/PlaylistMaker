@@ -64,4 +64,6 @@
     <string name="two_minutes">минуты</string>
     <string name="zero_many_minutes">минут</string>
     <string name="no_tracks_in_playlist_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="error_no_connection">Отсутствует подключение к сети интернет</string>
+    <string name="message_notification_permission">Приложению требуются дополнительные разрешения для показа уведомлений</string>
 </resources>

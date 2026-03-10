@@ -60,4 +60,6 @@
     <string name="two_minutes">minutes</string>
     <string name="zero_many_minutes">minutes</string>
     <string name="no_tracks_in_playlist_share">This playlist does not contain a list of tracks, that can be shared</string>
+    <string name="error_no_connection">There is no Internet connection</string>
+    <string name="message_notification_permission">The app requires additional permissions to show notifications</string>
 </resources>

@@ -8,25 +8,19 @@ import com.practicum.playlistmaker.media.favorites.domain.db.FavoritesInteractor
 import com.practicum.playlistmaker.media.playlists.domain.db.PlaylistsInteractor
 import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.media.playlists.model.PlaylistState
-import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
+import com.practicum.playlistmaker.player.service.AudioPlayerControl
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.util.Converter.timeConversion
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class PlayerViewModel(
     private val trackUrl: String,
-    private val playerInteractor: PlayerInteractor,
     private val favoritesInteractor: FavoritesInteractor,
     private val playlistsInteractor: PlaylistsInteractor
 ): ViewModel() {
 
-    private var timerJob: Job? = null
     private val playerStateLiveData = MutableLiveData<PlayerStatus>(PlayerStatus.Default())
     fun observePlayerState(): LiveData<PlayerStatus> = playerStateLiveData
 
@@ -36,70 +30,47 @@ class PlayerViewModel(
     private val playlistsStateLiveData = MutableLiveData< PlaylistState>(PlaylistState.Loading)
     fun observePlaylistsState(): LiveData<PlaylistState> = playlistsStateLiveData
 
+    private var audioPlayerControl: AudioPlayerControl? = null
+
     init {
-        playerPrepare()
         getPlaylists()
     }
 
-    //работа таймера
-    private fun startTimer() {
-        timerJob = viewModelScope.launch {
-            while (isActive && playerInteractor.isPlaying()){
-                delay(PLAY_DELAY)
-                playerStateLiveData.postValue(PlayerStatus.Play(getTimeProgress()))
+    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl){
+        this.audioPlayerControl = audioPlayerControl
+        viewModelScope.launch {
+            audioPlayerControl.getPlayerState().collect {
+                playerStateLiveData.postValue(it)
             }
         }
     }
 
-    private fun stopTimer() {
-        timerJob?.cancel()
-        timerJob = null
+    fun showNotification(){
+        if (playerStateLiveData.value is PlayerStatus.Play) {
+            audioPlayerControl?.showNotification()
+        }
+    }
+    fun hideNotification(){
+        if (playerStateLiveData.value is PlayerStatus.Play) {
+            audioPlayerControl?.hideNotification()
+        }
     }
 
-    //работа плеера
-    private fun playerPrepare(){
-        trackUrl.let{
-            playerInteractor.playerPrepare(
-                it,
-                {
-                    playerStateLiveData.postValue(PlayerStatus.Prepared())
-                },
-                {
-                    playerStateLiveData.postValue(PlayerStatus.Prepared())
-                    stopTimer()
-                }
-            )
-        }
+    fun removeAudioPlayerControl(){
+        audioPlayerControl = null
     }
 
     fun playerControl(){
         when (playerStateLiveData.value){
-            is PlayerStatus.Play -> playerPause()
-            is PlayerStatus.Pause, is PlayerStatus.Prepared -> playerStart()
-            else -> {}
+            is PlayerStatus.Play -> audioPlayerControl?.playerPause()
+            else -> audioPlayerControl?.playerStart()
         }
     }
 
-    private fun playerStart(){
-        playerInteractor.playerStart()
-        playerStateLiveData.postValue(PlayerStatus.Play(getTimeProgress()))
-        startTimer()
-    }
-
-    fun playerPause(){
-        playerInteractor.playerPause()
-        playerStateLiveData.postValue(PlayerStatus.Pause(getTimeProgress()))
-        stopTimer()
-    }
 
     override fun onCleared() {
         super.onCleared()
-        playerInteractor.playerRelease()
-        stopTimer()
-    }
-
-    private fun getTimeProgress(): String {
-        return timeConversion(playerInteractor.getCurrentPosition().toLong())
+        removeAudioPlayerControl()
     }
 
     fun onFavoriteClicked(track: Track){
@@ -163,7 +134,4 @@ class PlayerViewModel(
         }
     }
 
-    companion object{
-        private const val PLAY_DELAY = 300L
-    }
 }
