@@ -3,16 +3,17 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.practicum.playlistmaker"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.practicum.playlistmaker"
         minSdk = 29
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -32,11 +33,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin{
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.10.2"
     }
 }
 
@@ -47,6 +54,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -69,7 +78,7 @@ dependencies {
 
     implementation(libs.androidx.viewpager2)
 
-    implementation(libs.material.v180)
+    //implementation(libs.material.v180)
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
@@ -81,5 +90,13 @@ dependencies {
     implementation(libs.androidx.room.ktx)//поддержка корутин
     ksp(libs.androidx.room.compiler.v250)// Kotlin-кодогенератор
 
+    implementation("androidx.compose.ui:ui:1.10.5")
+    implementation("androidx.compose.material:material:1.10.5")
+    implementation(libs.androidx.compose.material3)
+    implementation("androidx.activity:activity-compose:1.13.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.10.5")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("io.coil-kt.coil3:coil-compose:3.4.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 
 }
