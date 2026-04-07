@@ -1,12 +1,19 @@
 package com.practicum.playlistmaker.player.ui.activity
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -17,14 +24,15 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
-import com.practicum.playlistmaker.main.ui.MainActivity
 import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.media.playlists.model.PlaylistState
 import com.practicum.playlistmaker.media.playlists.ui.activity.PlaylistAddFragment
+import com.practicum.playlistmaker.player.service.MusicService
 import com.practicum.playlistmaker.player.ui.bottom_sheet.PlaylistBottomSheetAdapter
 import com.practicum.playlistmaker.player.ui.models.PlayerStatus
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.util.ConnectionReceiver
 import com.practicum.playlistmaker.util.Converter.dpToPx
 import com.practicum.playlistmaker.util.Converter.timeConversion
 import com.practicum.playlistmaker.util.debounce
@@ -44,7 +52,24 @@ class PlayerFragment: Fragment() {
     private lateinit var onClickDebouncePlaylist: (Playlist) -> Unit
     private val playlist = mutableListOf<Playlist>()
     private lateinit var playlistAdapter: PlaylistBottomSheetAdapter
+    private val connectionBroadcastReceiver = ConnectionReceiver()
+    private var isConnectedService = false
 
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(
+            name: ComponentName?,
+            service: IBinder?
+        ) {
+            val binder = service as MusicService.MusicServiceBinder
+            isConnectedService = true
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isConnectedService = false
+            viewModel.removeAudioPlayerControl()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,6 +102,8 @@ class PlayerFragment: Fragment() {
             binding.playTrackProgress.text = it.timeProgress
         }
 
+        bindMusicService()
+
         viewModel.observeIsFavorite().observe(viewLifecycleOwner){
             changeImageButtonFavorite(it)
         }
@@ -98,6 +125,7 @@ class PlayerFragment: Fragment() {
     }
 
     override fun onDestroyView() {
+        unbindMusicService()
         super.onDestroyView()
         binding.playlistBtmRecyclerView.adapter = null
         _binding = null
@@ -139,7 +167,8 @@ class PlayerFragment: Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.playerPause()
+        viewModel.showNotification()
+        requireContext().unregisterReceiver(connectionBroadcastReceiver)
     }
 
     private fun changeImageButtonPlay(playerState: PlayerStatus){
@@ -202,8 +231,6 @@ class PlayerFragment: Fragment() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN}
         binding.playlistBtmRecyclerView.adapter = playlistAdapter
 
-
-
     }
 
     private fun addTrackToPlaylist(playlist: Playlist){
@@ -236,21 +263,44 @@ class PlayerFragment: Fragment() {
         this.playlist.clear()
         this.playlist.addAll(newPlaylists)
         playlistAdapter.notifyDataSetChanged()
-
-//        binding.playlistBtmRecyclerView.adapter =
-//            PlaylistBottomSheetAdapter(newPlaylists) {newPlaylist -> onClickDebouncePlaylist(newPlaylist)}
-
     }
 
     fun showEmpty() {
         binding.playlistBtmRecyclerView.visibility = View.GONE
     }
 
-
     private fun showMessageToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (isConnectedService) viewModel.showNotification()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isConnectedService) {viewModel.hideNotification()}
+        ContextCompat.registerReceiver(
+            requireContext(),
+            connectionBroadcastReceiver,
+            IntentFilter(ConnectionReceiver.ACTION_CONNECTIVITY),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    private fun bindMusicService(){
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            putExtra("track_url", currentTrack?.previewUrl)//trackUrl)
+            putExtra("track_artist", currentTrack?.artistName)
+            putExtra("track_name", currentTrack?.trackName)
+        }
+        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService(){
+        requireContext().unbindService(serviceConnection)
+    }
     companion object{
         private const val CORNER_RADIUS = 8f
         private const val MEDIA_TRACK_KEY = "media_track_key"

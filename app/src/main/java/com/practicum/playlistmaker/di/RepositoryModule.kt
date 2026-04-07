@@ -9,8 +9,6 @@ import com.practicum.playlistmaker.media.playlists.data.PlaylistsRepositoryImpl
 import com.practicum.playlistmaker.media.playlists.data.WorkingWithFilesRepositoryImpl
 import com.practicum.playlistmaker.media.playlists.domain.db.PlaylistsRepository
 import com.practicum.playlistmaker.media.playlists.domain.db.WorkingWithFilesRepository
-import com.practicum.playlistmaker.player.data.impl.PlayerRepositoryImpl
-import com.practicum.playlistmaker.player.domain.api.PlayerRepository
 import com.practicum.playlistmaker.search.data.impl.HistoryRepositoryImpl
 import com.practicum.playlistmaker.search.data.impl.TracksSearchRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
@@ -23,10 +21,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val repositoryModule = module {
-
-    factory <PlayerRepository> {
-        PlayerRepositoryImpl(get())
-    }
 
     factory <TracksSearchRepository> {
         TracksSearchRepositoryImpl(get())

@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.search.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -21,6 +23,7 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.model.TracksState
 import com.practicum.playlistmaker.search.ui.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
+import com.practicum.playlistmaker.util.ConnectionReceiver
 import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
@@ -34,7 +37,7 @@ class SearchFragment: Fragment() {
     private var simpleTextWatcher: TextWatcher? = null
     private var trackList = arrayListOf<Track>()
     private lateinit var onClickDebounce: (Track) -> Unit
-
+    private val connectionBroadcastReceiver = ConnectionReceiver()
     enum class StateSearch {
         CLEAR,
         ERROR,
@@ -244,6 +247,22 @@ class SearchFragment: Fragment() {
     fun showMessageToast(message: String?) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
+
+    override fun onResume() {
+        super.onResume()
+        ContextCompat.registerReceiver(
+            requireContext(),
+            connectionBroadcastReceiver,
+            IntentFilter(ConnectionReceiver.ACTION_CONNECTIVITY),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireContext().unregisterReceiver(connectionBroadcastReceiver)
+    }
+
     companion object {
         const val TEXT_EMPTY = ""
         const val CLICK_DEBOUNCE_DELAY = 1000L

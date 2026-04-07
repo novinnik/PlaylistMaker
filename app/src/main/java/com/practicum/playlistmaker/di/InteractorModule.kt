@@ -6,8 +6,6 @@ import com.practicum.playlistmaker.media.playlists.domain.db.PlaylistsInteractor
 import com.practicum.playlistmaker.media.playlists.domain.db.WorkingWithFilesInteractor
 import com.practicum.playlistmaker.media.playlists.domain.impl.PlaylistsInteractorImpl
 import com.practicum.playlistmaker.media.playlists.domain.impl.WorkingWithFileInteractorImpl
-import com.practicum.playlistmaker.player.domain.api.PlayerInteractor
-import com.practicum.playlistmaker.player.domain.impl.PlayerInteractorImpl
 import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksSearchInteractor
 import com.practicum.playlistmaker.search.domain.impl.HistoryInteractorImpl
@@ -19,10 +17,6 @@ import com.practicum.playlistmaker.setting.domain.impl.ThemeInteractorImpl
 import org.koin.dsl.module
 
 val interactorModule = module {
-
-    factory <PlayerInteractor>{
-        PlayerInteractorImpl(get())
-    }
 
     factory <TracksSearchInteractor> {
         TracksSearchInteractorImpl(get())
