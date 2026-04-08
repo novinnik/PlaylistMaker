@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ fun PlaceholderError(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
+        Spacer(modifier = Modifier.height(104.dp))
         Image(
             painter = painterResource(R.drawable.ic_placeholder_no_connection),
             contentDescription = stringResource(R.string.no_connection)
@@ -47,6 +49,7 @@ fun PlaceholderError(
             modifier = Modifier.padding(16.dp),
             textAlign = TextAlign.Center,
             style = TextStyle(
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily(Font(R.font.ys_display_medium))

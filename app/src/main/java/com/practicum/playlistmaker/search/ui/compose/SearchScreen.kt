@@ -23,8 +23,6 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.model.TracksState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 
-
-//@Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel,
@@ -34,18 +32,11 @@ fun SearchScreen(
     onClearClick: () -> Unit,
     onClearHistory: () -> Unit,
     onHistoryTrackClick: (Track) -> Unit,
-//    onRetry: () -> Unit
+    onRetry: () -> Unit
 ){
 
     val stateSearch by viewModel.observeState().observeAsState()
     val historyTracks by viewModel.observeHistory().observeAsState()
-
-  //  var textSearch by rememberSaveable { mutableStateOf("")  }
-   // val onTextChanged = viewModel.onQueryChanged(text)
-//    val onClearClick = {}
-//
-    val onRetry = {viewModel.debounceSearchTrack(textSearch)}
-
 
     Column (
         modifier = Modifier
@@ -65,7 +56,6 @@ fun SearchScreen(
             modifier = Modifier.fillMaxSize()
         ){
             when (stateSearch) {
-                //showLoading()
                 is TracksState.Loading ->
                     CircularProgressIndicator(
                         modifier = Modifier
@@ -74,19 +64,18 @@ fun SearchScreen(
                             color = colorResource(R.color.progress_bar)
                     )
 
-                //showContent(state.tracks)
                 is TracksState.Content ->
                     ShowContentScreen(
                         (stateSearch as TracksState.Content).tracks,
                         onTrackClick
                     )
 
-                //showError()
                 is TracksState.Error ->
-                    PlaceholderError (retrySearch = onRetry)
+                    PlaceholderError(retrySearch = onRetry)
 
-                //showEmpty()
-                is TracksState.Empty -> {}
+                is TracksState.Empty -> {
+                    PlaceholderNothing(stringResource(R.string.nothing_was_found))
+                }
 
                 else -> {
                     ShowHistoryScreen(

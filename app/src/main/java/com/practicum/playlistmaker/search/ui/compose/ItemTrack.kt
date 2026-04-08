@@ -66,7 +66,6 @@ fun ItemTrack(track: Track, onClick: (Track) -> Unit){
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 12.dp)
-          //  .height(60.dp)
             .clickable { onClick(track) },
         verticalAlignment = Alignment.CenterVertically
     ){

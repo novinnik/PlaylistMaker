@@ -1,6 +1,6 @@
-import androidx.compose.foundation.layout.fillMaxSize
+
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -47,8 +47,7 @@ fun FieldSearchInput(
         value = textQuery,
         modifier = Modifier
             .fillMaxWidth()
-            .height(52.dp)
-            .padding(0.dp),
+            .padding(start = 16.dp, end = 16.dp),
         maxLines = 1,
         singleLine = true,
         textStyle = TextStyle(fontSize = 16.sp, color = colorResource(R.color.yp_black)),
@@ -92,8 +91,8 @@ fun FieldSearchInput(
         },
         //цвет состояния активности / фокуса
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
+            focusedContainerColor = MaterialTheme.colorScheme.onSecondary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.onSecondary,
             focusedTextColor = MaterialTheme.colorScheme.onBackground,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,

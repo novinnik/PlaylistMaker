@@ -114,15 +114,11 @@ fun ShowHistoryScreen(
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.ys_display_medium)),
                 color = MaterialTheme.colorScheme.onBackground,
-//                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
             )
 
-         //   Spacer(modifier = Modifier.height(8.dp))
-
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
-              //  verticalArrangement = Arrangement.spacedBy(8.dp)
             ){
                 items(tracks) { track ->
                     ItemTrack(track = track, onClick = onClick)

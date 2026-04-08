@@ -1,4 +1,4 @@
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -27,7 +26,6 @@ fun AppBarTop(title: String, isViewIcon: Boolean, onClick:()-> Unit){
         modifier = Modifier
             .fillMaxWidth()
             .height(dimensionResource(R.dimen.toolbar_height))
-           // .background(MaterialTheme.colorScheme.background)
         ,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -40,7 +38,7 @@ fun AppBarTop(title: String, isViewIcon: Boolean, onClick:()-> Unit){
         }
         Text(
             text = title,
-            modifier = Modifier.padding(start = 12.dp),
+            modifier = Modifier.padding(start = 16.dp),
             fontSize = 22.sp,
             fontFamily = FontFamily(Font(R.font.ys_display_medium)),
             fontWeight = FontWeight(500),

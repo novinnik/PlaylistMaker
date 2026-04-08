@@ -78,8 +78,6 @@ dependencies {
 
     implementation(libs.androidx.viewpager2)
 
-    //implementation(libs.material.v180)
-
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.fragment.ktx.v156)
@@ -90,13 +88,13 @@ dependencies {
     implementation(libs.androidx.room.ktx)//поддержка корутин
     ksp(libs.androidx.room.compiler.v250)// Kotlin-кодогенератор
 
-    implementation("androidx.compose.ui:ui:1.10.5")
-    implementation("androidx.compose.material:material:1.10.5")
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material3)
-    implementation("androidx.activity:activity-compose:1.13.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.10.5")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("io.coil-kt.coil3:coil-compose:3.4.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+    implementation(libs.androidx.activity.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 }

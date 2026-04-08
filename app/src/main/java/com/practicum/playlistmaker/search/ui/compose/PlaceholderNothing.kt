@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,10 +40,11 @@ fun PlaceholderNothing(title:String) {
         )
 
         Text(
-            text = title,//stringResource(R.string.nothing_was_found),
+            text = title,
             modifier = Modifier.padding(top = 16.dp),
             textAlign = TextAlign.Center,
             style = TextStyle(
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily(Font(R.font.ys_display_medium))
