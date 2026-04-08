@@ -11,18 +11,15 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
 
 @Composable
-fun ShowContentScreen(tracks: ArrayList<Track>,  onClick: (Track) -> Unit){
-    if (tracks.isNotEmpty()){
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ){
-            items(tracks) { track ->
-                ItemTrack(track = track, onClick = onClick)
-            }
+fun ShowContentScreen(tracks: ArrayList<Track>, onClick: (Track) -> Unit) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(tracks) { track ->
+            ItemTrack(track = track, onClick = onClick)
         }
-    } else {
-        PlaceholderNothing(stringResource(R.string.nothing_was_found))
     }
+
 }
 

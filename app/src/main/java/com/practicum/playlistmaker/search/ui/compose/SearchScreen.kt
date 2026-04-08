@@ -57,18 +57,28 @@ fun SearchScreen(
         ){
             when (stateSearch) {
                 is TracksState.Loading ->
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(44.dp)
-                            .align(Alignment.Center),
-                            color = colorResource(R.color.progress_bar)
-                    )
+                    Box(modifier = Modifier
+                        .fillMaxSize(),
+                        contentAlignment = Alignment.Center)
+                    {
+                        CircularProgressIndicator()
+                    }
 
-                is TracksState.Content ->
-                    ShowContentScreen(
-                        (stateSearch as TracksState.Content).tracks,
-                        onTrackClick
-                    )
+                is TracksState.Content -> {
+                    val tracks = (stateSearch as TracksState.Content).tracks
+                    if (tracks.isNotEmpty()) {
+                        ShowContentScreen(
+                            tracks,
+                            onTrackClick
+                        )
+                    } else {
+                        ShowHistoryScreen(
+                            tracks = historyTracks ?: arrayListOf<Track>(),
+                            onClearHistoryClick = onClearHistory,
+                            onClick = onHistoryTrackClick
+                        )
+                    }
+                }
 
                 is TracksState.Error ->
                     PlaceholderError(retrySearch = onRetry)

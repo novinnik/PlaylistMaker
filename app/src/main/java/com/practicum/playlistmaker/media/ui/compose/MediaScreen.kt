@@ -13,6 +13,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,19 +25,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.media.favorites.model.FavoriteState
+import com.practicum.playlistmaker.media.favorites.ui.view_model.FavoritesViewModel
 import com.practicum.playlistmaker.media.playlists.model.PlaylistState
+import com.practicum.playlistmaker.media.playlists.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun MediaScreen(
+    playlistsViewModel: PlaylistsViewModel,
+    favoritesViewModel: FavoritesViewModel,
     playlistState: PlaylistState,
     favoritesState: FavoriteState,
     onClickOpenPlayer: (Track) -> Unit,
     onClickVewDetails: (Int) -> Unit,
     onClickNewPlaylist:() -> Unit
 ){
+
+    LaunchedEffect(key1 = Unit) {
+        playlistsViewModel.fillData()
+        favoritesViewModel.fillData()
+    }
+
     val tabs = listOf(
         stringResource(R.string.select_tracks),
         stringResource(R.string.playlists)

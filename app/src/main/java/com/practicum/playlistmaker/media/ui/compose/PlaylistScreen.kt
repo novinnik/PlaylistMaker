@@ -1,4 +1,5 @@
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -51,12 +52,12 @@ fun PlaylistsScreen(
         }
         when (state) {
             is PlaylistState.Loading ->
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .align(Alignment.CenterHorizontally),
-                    color = colorResource(R.color.progress_bar)
-                )
+                Box(modifier = Modifier
+                    .fillMaxSize(),
+                    contentAlignment = Alignment.Center)
+                {
+                    CircularProgressIndicator()
+                }
 
             PlaylistState.Empty -> {
                 PlaceholderNothing(stringResource(R.string.no_playlist))

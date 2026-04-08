@@ -29,7 +29,6 @@ class MediaFragment: Fragment() {
     private val viewModelPlaylists: PlaylistsViewModel by inject()
     private val viewModelFavorites: FavoritesViewModel by inject()
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,6 +43,8 @@ class MediaFragment: Fragment() {
 
                 ThemeProject {
                     MediaScreen(
+                        viewModelPlaylists,
+                        viewModelFavorites,
                         playlistState = playlistState,
                         favoritesState = favoritesState,
                         onClickOpenPlayer = { track ->
