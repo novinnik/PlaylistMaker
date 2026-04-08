@@ -21,11 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.practicum.playlistmaker.R
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun PlaceholderNothingPreview() {
-    PlaceholderNothing(stringResource(R.string.nothing_was_found))
-}
 @Composable
 fun PlaceholderNothing(title:String) {
     Column(
@@ -51,4 +46,10 @@ fun PlaceholderNothing(title:String) {
             )
         )
     }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun PlaceholderNothingPreview() {
+    PlaceholderNothing(stringResource(R.string.nothing_was_found))
 }

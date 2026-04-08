@@ -22,14 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.practicum.playlistmaker.R
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun PlaceholderErrorPreview() {
-    PlaceholderError(
-        retrySearch = {}
-    )
-}
-
 @Composable
 fun PlaceholderError(
     retrySearch: () -> Unit
@@ -63,4 +55,12 @@ fun PlaceholderError(
             Text(text = stringResource(R.string.refresh))
         }
     }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun PlaceholderErrorPreview() {
+    PlaceholderError(
+        retrySearch = {}
+    )
 }

@@ -1,13 +1,18 @@
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Measurable
@@ -29,21 +34,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.media.playlists.domain.model.Playlist
 import com.practicum.playlistmaker.util.Converter.getNoun
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun ItemPlaylistPreview() {
-    ItemPlaylist(
-        playlist = Playlist(
-            0,
-            image = null,
-            title = "Playlist name",
-            description = "",
-            listIds = emptyList(),
-            count = 90
-        ),
-        onClick = {}
-    )
-}
+
 
 @Composable
 fun ItemPlaylist(
@@ -54,35 +45,31 @@ fun ItemPlaylist(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .background(MaterialTheme.colorScheme.background)
             .clickable { onClick(playlist.id) },
     ){
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(playlist.image.toString())
-                .crossfade(true)
-                .listener(
-                    onError = { _, result ->
-                        Log.e("IMAGE_ERROR", result.throwable.toString())
-                    }
-                )
-                .build(),
-            contentScale = ContentScale.Crop,
-            contentDescription = playlist.title,
-            placeholder = painterResource(R.drawable.ic_placeholder),
-            error = painterResource(R.drawable.ic_placeholder),
-            fallback = painterResource(R.drawable.ic_placeholder),
 
-            modifier = Modifier
-                .layout { measurable: Measurable, constraints: Constraints ->
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(playlist.image.toString())
+                    .crossfade(true)
+                    .listener(
+                        onError = { _, result ->
+                            Log.e("IMAGE_ERROR", result.throwable.toString())
+                        }
+                    )
+                    .build(),
+                contentScale = ContentScale.Crop,
+                contentDescription = playlist.title,
+                placeholder = painterResource(R.drawable.ic_placeholder),
+                error = painterResource(R.drawable.ic_placeholder),
+                fallback = painterResource(R.drawable.ic_placeholder),
 
-                    val looseConstraints = constraints.copy(maxHeight = Constraints.Infinity)
-                    val placeable = measurable.measure(looseConstraints)
-                    layout(placeable.width, placeable.height){
-                        placeable.placeRelative(0,0)
-                    }
-                }
-                .fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth().aspectRatio(1F)
+
             )
+
         Spacer(modifier = Modifier.width(8.dp))
 
             Text(
@@ -114,4 +101,20 @@ private fun countString(count: Int): String{
         stringResource(R.string.zero_many_track))
 
     return "$count $countStr"
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun ItemPlaylistPreview() {
+    ItemPlaylist(
+        playlist = Playlist(
+            0,
+            image = null,
+            title = "Playlist name",
+            description = "",
+            listIds = emptyList(),
+            count = 90
+        ),
+        onClick = {}
+    )
 }

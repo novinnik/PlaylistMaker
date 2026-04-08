@@ -1,6 +1,5 @@
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -25,15 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.practicum.playlistmaker.R
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun FieldSearchInputPreview() {
-    FieldSearchInput(
-        query = "",
-        onTextChanged = {},
-        onClearClick = {},
-    )
-}
 
 @Composable
 fun FieldSearchInput(
@@ -98,5 +88,15 @@ fun FieldSearchInput(
             unfocusedIndicatorColor = Color.Transparent,
         )
 
+    )
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+private fun FieldSearchInputPreview() {
+    FieldSearchInput(
+        query = "",
+        onTextChanged = {},
+        onClearClick = {},
     )
 }

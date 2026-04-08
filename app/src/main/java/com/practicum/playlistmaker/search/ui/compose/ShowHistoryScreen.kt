@@ -22,6 +22,55 @@ import androidx.compose.ui.unit.sp
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
 
+
+@Composable
+fun ShowHistoryScreen(
+    tracks: ArrayList<Track>,
+    onClearHistoryClick: () -> Unit,
+    onClick: (Track) -> Unit
+){
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (tracks.isNotEmpty()){
+
+            Text(
+                text = stringResource(R.string.your_history),
+                fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.ys_display_medium)),
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
+            )
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+            ){
+                items(tracks) { track ->
+                    ItemTrack(track = track, onClick = onClick)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onClearHistoryClick,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 24.dp),
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.background,
+                    containerColor = MaterialTheme.colorScheme.onBackground
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.clear_history),
+                    fontFamily = FontFamily(Font(R.font.ys_display_medium)),
+                    fontSize = 14.sp)
+            }
+        }
+    }
+
+}
+
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun ShowHistoryScreenPreview() {
@@ -96,52 +145,3 @@ private fun ShowHistoryScreenPreview() {
         onClick = {},
     )
 }
-
-@Composable
-fun ShowHistoryScreen(
-    tracks: ArrayList<Track>,
-    onClearHistoryClick: () -> Unit,
-    onClick: (Track) -> Unit
-){
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (tracks.isNotEmpty()){
-
-            Text(
-                text = stringResource(R.string.your_history),
-                fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.ys_display_medium)),
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
-            )
-
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-            ){
-                items(tracks) { track ->
-                    ItemTrack(track = track, onClick = onClick)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onClearHistoryClick,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 24.dp),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.background,
-                    containerColor = MaterialTheme.colorScheme.onBackground
-                )
-            ) {
-                Text(
-                    text = stringResource(id = R.string.clear_history),
-                    fontFamily = FontFamily(Font(R.font.ys_display_medium)),
-                    fontSize = 14.sp)
-            }
-        }
-    }
-
-}
-

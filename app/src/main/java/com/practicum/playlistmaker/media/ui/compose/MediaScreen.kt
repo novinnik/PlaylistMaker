@@ -1,4 +1,5 @@
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastForEachIndexed
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.media.favorites.model.FavoriteState
 import com.practicum.playlistmaker.media.favorites.ui.view_model.FavoritesViewModel
@@ -59,7 +61,7 @@ fun MediaScreen(
 
     Column (
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().background(MaterialTheme.colorScheme.background)
     ){
         AppBarTop(stringResource(id = R.string.media), false) { }
 
@@ -79,7 +81,7 @@ fun MediaScreen(
             },
             divider = {},
         ){
-            tabs.forEachIndexed {index, string ->
+            tabs.fastForEachIndexed {index, string ->
                 Tab(
                     selected = selectedTabIndex.value == index,
                     onClick = {scope.launch {
